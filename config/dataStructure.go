@@ -5,6 +5,10 @@ type User struct {
 	Password	string
 }
 
+type BlogEntryList struct{
+	BlogEntries	[]BlogEntry
+}
+
 type BlogEntry struct {
 	Author		string
 	Date		string

@@ -1,11 +1,9 @@
 package main
 
 import (
-	"Blog/dataHandling"
+	"Blog/server"
 )
 
 func main(){
-	dataHandling.SaveUser("TestUser", "123")
-	dataHandling.SaveBlogEntry("TestUser", "TestBlog", "Test test test")
-	dataHandling.SaveComment("TestUser", "Testi test")
+	server.StartServer()
 }
