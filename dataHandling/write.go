@@ -7,7 +7,6 @@ import (
 	"os"
 )
 
-
 func SaveUser(name, password string){
 	users := GetUsers()
 	userData := config.User{
@@ -54,7 +53,7 @@ func SaveComment(author, text string){
 	}
 	comments = append(comments, commentData)
 
-	file, err := os.Create(config.DataDir + "blogEntries.json")
+	file, err := os.Create(config.DataDir + "comments.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(comments)
