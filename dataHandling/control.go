@@ -27,6 +27,22 @@ func PasswordCorrect(name, password string) bool {
 	return false
 }
 
+func NewUserID(userList config.UserList) int{
+	x := 1
+
+	var assignedIDs []int
+
+	for _,u:= range userList.Users{
+		assignedIDs = append(assignedIDs, u.ID)
+	}
+
+	for utility.IsIntInArray(x, assignedIDs){
+		x++
+	}
+
+	return x
+}
+
 func NewBlogID(blogEntryList config.BlogEntryList) int{
 	x := 1
 
@@ -41,5 +57,22 @@ func NewBlogID(blogEntryList config.BlogEntryList) int{
 	}
 
 	return x
-
 }
+
+func NewCommentID(commentList config.CommentList) int{
+	x := 1
+
+	var assignedIDs []int
+
+	for _,c:= range commentList.Comments{
+		assignedIDs = append(assignedIDs, c.ID)
+	}
+
+	for utility.IsIntInArray(x, assignedIDs){
+		x++
+	}
+
+	return x
+}
+
+

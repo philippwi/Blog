@@ -1,5 +1,7 @@
 package config
 
+//general
+
 type UserList struct {
 	Users []User
 }
@@ -7,6 +9,7 @@ type UserList struct {
 type User struct {
 	Name     string
 	Password string
+	ID       int
 }
 
 type BlogEntryList struct {
@@ -18,7 +21,7 @@ type BlogEntry struct {
 	Date    string
 	Title   string
 	Content string
-	ID		int
+	ID      int
 }
 
 type CommentList struct {
@@ -27,6 +30,15 @@ type CommentList struct {
 
 type Comment struct {
 	Author string
-	//Date		int
-	Text string
+	Date   string
+	Text   string
+	BlogID int
+	ID     int
+}
+
+//page specific
+
+type ViewblogData struct {
+	Blog         BlogEntry
+	BlogComments []Comment
 }

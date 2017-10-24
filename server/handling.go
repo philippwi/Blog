@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"html/template"
 	"Blog/dataHandling"
+	"strconv"
 )
 
 var tpl *template.Template
@@ -45,28 +46,44 @@ func loginPage(wr http.ResponseWriter, rq *http.Request) {
 
 func homePage(wr http.ResponseWriter, rq *http.Request) {
 	if rq.Method == http.MethodPost {
-
-		switch rq.FormValue("action"){
-		case "newBlog":
-			author := "TestUser" //braucht aktuellen nutzer
-			title := rq.FormValue("blgtitle")
-			content := rq.FormValue("blgcont")
-			dataHandling.SaveBlogEntry(author, title, content)
-			http.Redirect(wr, rq, "/home", http.StatusFound)
-
-		case "showBlog":
-
-		}
-
-
+		author := "TestUser" //braucht aktuellen nutzer
+		title := rq.FormValue("blgtitle")
+		content := rq.FormValue("blgcont")
+		dataHandling.SaveBlogEntry(author, title, content)
+		http.Redirect(wr, rq, "/home", http.StatusFound)
 	}
 	tpl.ExecuteTemplate(wr, "home.html", dataHandling.GetBlogEntryList())
 }
 
 func displayBlog(wr http.ResponseWriter, rq *http.Request) {
-	blogID := rq.URL.Query()["ID"][0]
+	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
 
-	fmt.Println(blogID)
+	allBlogs := dataHandling.GetBlogEntryList()
+	allComments := dataHandling.GetCommentList()
 
-	tpl.ExecuteTemplate(wr, "viewblog.html", nil)
+	blog := config.BlogEntry{}
+	blogComments := []config.Comment{}
+
+	for _, b := range allBlogs.BlogEntries {
+		if b.ID == blogID {
+			blog = b
+			break
+		}
+	}
+
+	for _, c := range allComments.Comments {
+		if c.BlogID == blogID {
+			blogComments = append(blogComments, c)
+		}
+	}
+
+	data := config.ViewblogData{Blog: blog, BlogComments: blogComments}
+
+	if rq.Method == http.MethodPost {
+		commentText := rq.FormValue("cmnt")
+		dataHandling.SaveComment("TestUser", commentText, blog.ID)
+		http.Redirect(wr, rq, "/viewblog?ID="+strconv.Itoa(blogID), http.StatusFound)
+	}
+
+	tpl.ExecuteTemplate(wr, "viewblog.html", data)
 }

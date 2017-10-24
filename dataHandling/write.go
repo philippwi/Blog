@@ -8,17 +8,19 @@ import (
 )
 
 func SaveUser(name, password string){
-	users := GetUserList().Users
+	userList := GetUserList()
+
 	userData := config.User{
 		Name: name,
 		Password: password,
+		ID: NewUserID(userList),
 	}
-	users = append(users, userData)
+	userList.Users = append(userList.Users, userData)
 
 	file, err := os.Create(config.DataDir + "users.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
-		enc.Encode(users)
+		enc.Encode(userList.Users)
 	} else{
 		panic(err)
 	}
@@ -27,6 +29,7 @@ func SaveUser(name, password string){
 
 func SaveBlogEntry(author, title, content string){
 	entryList := GetBlogEntryList()
+
 	entryData := config.BlogEntry{
 		Author: author,
 		Date: time.Now().Format("20060102"),
@@ -34,6 +37,7 @@ func SaveBlogEntry(author, title, content string){
 		Content: content,
 		ID: NewBlogID(entryList),
 	}
+
 	entryList.BlogEntries = append(entryList.BlogEntries, entryData)
 
 	file, err := os.Create(config.DataDir + "blogEntries.json")
@@ -46,18 +50,23 @@ func SaveBlogEntry(author, title, content string){
 	file.Close()
 }
 
-func SaveComment(author, text string){
-	comments := GetCommentList().Comments
+func SaveComment(author, text string, blogID int){
+	commentList := GetCommentList()
+
 	commentData := config.Comment{
 		Author: author,
+		Date: time.Now().Format("20060102"),
 		Text: text,
+		BlogID: blogID,
+		ID: NewCommentID(commentList),
 	}
-	comments = append(comments, commentData)
+
+	commentList.Comments = append(commentList.Comments, commentData)
 
 	file, err := os.Create(config.DataDir + "comments.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
-		enc.Encode(comments)
+		enc.Encode(commentList.Comments)
 	} else{
 		panic(err)
 	}

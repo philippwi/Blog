@@ -5,6 +5,34 @@
     <title>Home</title>
 </head>
 <body>
-hi
+{{if eq .Blog.ID 0}}
+<SCRIPT>
+    alert("Blog nicht gefunden!")
+    window.history.back()
+</SCRIPT>
+{{end}}
+
+<h1>{{.Blog.Title}}</h1><br>
+{{.Blog.Author}}<br>
+<p>{{.Blog.Content}}</p>
+
+<label>Kommentare:</label>
+
+<ul>
+    {{range .BlogComments}}
+    <li>{{.Text}}<br>
+        von {{.Author}}<br>
+        <br>
+    </li>
+    {{end}}
+</ul>
+
+<form method="post">
+    <br>
+    <label>Neuer Kommentar</label><br>
+    <textarea name="cmnt" cols="70" rows="5"></textarea>
+    <input type="submit" value="Abschicken">
+</form>
+
 </body>
 </html>
