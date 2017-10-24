@@ -4,6 +4,6 @@ import (
 	"Blog/server"
 )
 
-func main(){
+func main() {
 	server.StartServer()
 }

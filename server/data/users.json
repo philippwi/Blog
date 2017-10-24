@@ -1,1 +1,6 @@
-[{"Name":"TestUser","Password":"123"}]
+[
+  {
+    "Name": "TestUser",
+    "Password": "123"
+  }
+]

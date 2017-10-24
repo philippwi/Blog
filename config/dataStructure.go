@@ -1,24 +1,23 @@
 package config
 
 type User struct {
-	Name		string
-	Password	string
+	Name     string
+	Password string
 }
 
-type BlogEntryList struct{
-	BlogEntries	[]BlogEntry
+type BlogEntryList struct {
+	BlogEntries []BlogEntry
 }
 
 type BlogEntry struct {
-	Author		string
-	Date		string
-	Title		string
-	Content		string
+	Author  string
+	Date    string
+	Title   string
+	Content string
 }
 
 type Comment struct {
-	Author		string
+	Author string
 	//Date		int
-	Text		string
+	Text string
 }
-
