@@ -8,7 +8,7 @@ import (
 )
 
 func SaveUser(name, password string){
-	users := GetUsers()
+	users := GetUserList().Users
 	userData := config.User{
 		Name: name,
 		Password: password,
@@ -26,19 +26,20 @@ func SaveUser(name, password string){
 }
 
 func SaveBlogEntry(author, title, content string){
-	entries := GetBlogEntries()
+	entryList := GetBlogEntryList()
 	entryData := config.BlogEntry{
 		Author: author,
 		Date: time.Now().Format("20060102"),
 		Title: title,
 		Content: content,
+		ID: NewBlogID(entryList),
 	}
-	entries = append(entries, entryData)
+	entryList.BlogEntries = append(entryList.BlogEntries, entryData)
 
 	file, err := os.Create(config.DataDir + "blogEntries.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
-		enc.Encode(entries)
+		enc.Encode(entryList.BlogEntries)
 	} else{
 		panic(err)
 	}
@@ -46,7 +47,7 @@ func SaveBlogEntry(author, title, content string){
 }
 
 func SaveComment(author, text string){
-	comments := GetComments()
+	comments := GetCommentList().Comments
 	commentData := config.Comment{
 		Author: author,
 		Text: text,

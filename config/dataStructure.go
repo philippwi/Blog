@@ -1,5 +1,9 @@
 package config
 
+type UserList struct {
+	Users []User
+}
+
 type User struct {
 	Name     string
 	Password string
@@ -14,6 +18,11 @@ type BlogEntry struct {
 	Date    string
 	Title   string
 	Content string
+	ID		int
+}
+
+type CommentList struct {
+	Comments []Comment
 }
 
 type Comment struct {

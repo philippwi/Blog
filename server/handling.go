@@ -15,6 +15,7 @@ func StartServer() {
 	fmt.Println("Server running: http://localhost" + config.Port)
 	http.HandleFunc("/", loginPage)
 	http.HandleFunc("/home", homePage)
+	http.HandleFunc("/viewblog", displayBlog)
 	http.ListenAndServe(config.Port, nil)
 }
 
@@ -43,15 +44,29 @@ func loginPage(wr http.ResponseWriter, rq *http.Request) {
 }
 
 func homePage(wr http.ResponseWriter, rq *http.Request) {
-
 	if rq.Method == http.MethodPost {
-		author := "TestUser" //braucht aktuellen nutzer
-		title := rq.FormValue("blgtitle")
-		content := rq.FormValue("blgcont")
 
-		dataHandling.SaveBlogEntry(author, title, content)
+		switch rq.FormValue("action"){
+		case "newBlog":
+			author := "TestUser" //braucht aktuellen nutzer
+			title := rq.FormValue("blgtitle")
+			content := rq.FormValue("blgcont")
+			dataHandling.SaveBlogEntry(author, title, content)
+			http.Redirect(wr, rq, "/home", http.StatusFound)
 
-		http.Redirect(wr, rq, "/home", http.StatusFound)
+		case "showBlog":
+
+		}
+
+
 	}
-	tpl.ExecuteTemplate(wr, "home.html", config.BlogEntryList{BlogEntries: dataHandling.GetBlogEntries()})
+	tpl.ExecuteTemplate(wr, "home.html", dataHandling.GetBlogEntryList())
+}
+
+func displayBlog(wr http.ResponseWriter, rq *http.Request) {
+	blogID := rq.URL.Query()["ID"][0]
+
+	fmt.Println(blogID)
+
+	tpl.ExecuteTemplate(wr, "viewblog.html", nil)
 }

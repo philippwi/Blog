@@ -5,8 +5,8 @@
     <title>Home</title>
 </head>
 <body>
-
 <form method="post">
+    <input type="hidden" name="action" value="newBlog">
     <label for="btl">Blog-Titel</label><br>
     <input type="text" name="blgtitle" id="btl" size="100">
     <br><br>
@@ -17,9 +17,8 @@
 
 <ul>
     {{range .BlogEntries}}
-    <li>{{.Title}}<br>
-        {{.Author}}<br>
-        {{.Content}}<br>
+    <li><a href="viewblog?ID={{.ID}}">{{.Title}}</a><br>
+        von {{.Author}}<br>
         <br>
     </li>
     {{end}}
