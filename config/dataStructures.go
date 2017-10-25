@@ -2,18 +2,21 @@ package config
 
 //general
 
-type UserList struct {
+/*type UserList struct {
 	Users []User
 }
+type BlogEntryList struct {
+	BlogEntries []BlogEntry
+}
+
+type CommentList struct {
+	Comments []Comment
+}*/
 
 type User struct {
 	Name     string
 	Password string
 	ID       int
-}
-
-type BlogEntryList struct {
-	BlogEntries []BlogEntry
 }
 
 type BlogEntry struct {
@@ -22,10 +25,6 @@ type BlogEntry struct {
 	Title   string
 	Content string
 	ID      int
-}
-
-type CommentList struct {
-	Comments []Comment
 }
 
 type Comment struct {
@@ -38,7 +37,13 @@ type Comment struct {
 
 //page specific
 
+type HomeData struct {
+	CurrentUser string
+	BlogEntries []BlogEntry
+}
+
 type ViewblogData struct {
+	CurrentUser  string
 	Blog         BlogEntry
 	BlogComments []Comment
 }
