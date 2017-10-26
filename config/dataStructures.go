@@ -40,6 +40,7 @@ type Comment struct {
 type HomeData struct {
 	CurrentUser string
 	BlogEntries []BlogEntry
+//	Message     string
 }
 
 type ViewblogData struct {

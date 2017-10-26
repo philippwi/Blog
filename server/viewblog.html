@@ -12,9 +12,11 @@
 </SCRIPT>
 {{end}}
 
-
+{{if ne .CurrentUser ""}}
 <p>Aktueller Nutzer: {{.CurrentUser}}</p>
 <a href="logout">Ausloggen</a>
+{{end}}
+
 
 <h1>{{.Blog.Title}}</h1><br>
 {{.Blog.Author}}<br>
@@ -34,6 +36,10 @@
 <form method="post">
     <br>
     <label>Neuer Kommentar</label><br>
+    {{if eq .CurrentUser ""}}
+    <label for="nck">Nickname</label>
+    <input type="text" name="nicknm" id="nck"><br>
+    {{end}}
     <textarea name="cmnt" cols="70" rows="5"></textarea>
     <input type="submit" value="Abschicken">
 </form>

@@ -5,6 +5,8 @@
     <title>Home</title>
 </head>
 <body>
+
+{{if ne .CurrentUser ""}}
 <p>Aktueller Nutzer: {{.CurrentUser}}</p>
 <a href="logout">Ausloggen</a>
 <form method="post">
@@ -15,6 +17,7 @@
     <textarea name="blgcont" cols="100" rows="5"></textarea>
     <input type="submit" value="Eintragen">
 </form>
+{{end}}
 
 <ul>
     {{range .BlogEntries}}
@@ -24,5 +27,6 @@
     </li>
     {{end}}
 </ul>
+
 </body>
 </html>

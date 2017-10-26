@@ -17,7 +17,7 @@ func StartServer() {
 	fmt.Println("Server running: https://localhost" + config.Port)
 	http.HandleFunc("/", loginPage)
 	http.HandleFunc("/home", homePage)
-	http.HandleFunc("/viewblog", displayBlog)
+	http.HandleFunc("/viewblog", viewblogPage)
 	http.HandleFunc("/logout", Logout)
 	http.ListenAndServeTLS(config.Port, config.ServerDir+"cert.pem",config.ServerDir+"key.pem", nil)
 }
@@ -46,12 +46,13 @@ func loginPage(wr http.ResponseWriter, rq *http.Request) {
 }
 
 func homePage(wr http.ResponseWriter, rq *http.Request) {
-	if !IsUserLoggedIn(rq) {
-		http.Redirect(wr, rq, "/", http.StatusFound)
-		return
-	}
+	var currentUser string
 
-	currentUser := GetCurrentUsername(rq)
+	if !IsUserLoggedIn(rq) {
+		currentUser = ""
+	}else{
+		currentUser = GetCurrentUsername(rq)
+	}
 
 	if rq.Method == http.MethodPost {
 		if !IsUserLoggedIn(rq) {
@@ -69,16 +70,18 @@ func homePage(wr http.ResponseWriter, rq *http.Request) {
 		CurrentUser: currentUser,
 		BlogEntries: dataHandling.GetAllBlogEntries(),
 	}
+
 	tpl.ExecuteTemplate(wr, "home.html", pageData)
 }
 
-func displayBlog(wr http.ResponseWriter, rq *http.Request) {
-	if !IsUserLoggedIn(rq) {
-		http.Redirect(wr, rq, "/", http.StatusFound)
-		return
-	}
+func viewblogPage(wr http.ResponseWriter, rq *http.Request) {
+	var currentUser string
 
-	currentUser := GetCurrentUsername(rq)
+	if !IsUserLoggedIn(rq) {
+		currentUser = ""
+	}else{
+		currentUser = GetCurrentUsername(rq)
+	}
 
 	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
 
@@ -90,16 +93,16 @@ func displayBlog(wr http.ResponseWriter, rq *http.Request) {
 		BlogComments: blogComments}
 
 	if rq.Method == http.MethodPost {
-		if !IsUserLoggedIn(rq) {
-			http.Redirect(wr, rq, "/", http.StatusFound)
-			return
+		var author string
+		if currentUser == ""{
+			author = rq.FormValue("nicknm")+" (Leser)"
+		}else{
+			author = currentUser
 		}
-		author := GetCurrentUsername(rq)
 		commentText := rq.FormValue("cmnt")
 		dataHandling.SaveComment(author, commentText, blog.ID)
 		http.Redirect(wr, rq, "/viewblog?ID="+strconv.Itoa(blogID), http.StatusFound)
 	}
-
 	tpl.ExecuteTemplate(wr, "viewblog.html", pageData)
 }
 
