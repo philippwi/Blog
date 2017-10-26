@@ -1,3 +1,5 @@
+//Matrikelnummern: 3229403, 9964427
+
 package utility
 
 func IsIntInArray(number int, list []int) bool{

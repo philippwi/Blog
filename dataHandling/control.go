@@ -1,3 +1,5 @@
+//Matrikelnummern: 3229403, 9964427
+
 package dataHandling
 
 import (
@@ -20,11 +22,19 @@ func PasswordCorrect(name, password string) bool {
 	existingUsers := GetAllUsers()
 
 	for _, user := range existingUsers {
-		if user.Name == name && user.Password == password {
+		if name == user.Name && password == DecryptPassword(user.PwSalt) {
 			return true
 		}
 	}
 	return false
+}
+
+func EncryptPassword(pw string) string {
+	return pw
+}
+
+func DecryptPassword(code string) string {
+	return code
 }
 
 func GetBlogWithComments(blogID int) (blog config.BlogEntry, blogComments []config.Comment) {

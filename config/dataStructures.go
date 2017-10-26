@@ -1,3 +1,5 @@
+//Matrikelnummern: 3229403, 9964427
+
 package config
 
 //general
@@ -14,9 +16,9 @@ type CommentList struct {
 }*/
 
 type User struct {
-	Name     string
-	Password string
-	ID       int
+	Name   string
+	PwSalt string
+	ID     int
 }
 
 type BlogEntry struct {

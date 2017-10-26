@@ -1,3 +1,5 @@
+//Matrikelnummern: 3229403, 9964427
+
 package dataHandling
 
 import (
@@ -11,9 +13,9 @@ func SaveUser(name, password string){
 	users := GetAllUsers()
 
 	userData := config.User{
-		Name: name,
-		Password: password,
-		ID: NewUserID(),
+		Name:   name,
+		PwSalt: EncryptPassword(password),
+		ID:     NewUserID(),
 	}
 	users = append(users, userData)
 

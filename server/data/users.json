@@ -1,12 +1,12 @@
 [
   {
     "Name": "TestUser",
-    "Password": "12345",
+    "PwSalt": "123",
     "ID": 0
   },
   {
     "Name": "hans",
-    "Password": "123",
+    "PwSalt": "123",
     "ID": 1
   }
 ]
