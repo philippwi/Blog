@@ -77,4 +77,21 @@ func SaveComment(author, text string, blogID int){
 
 func ChangeUserPasswort(name, password string){
 
+	users := GetAllUsers()
+
+	for i,u := range users{
+		if u.Name == name{
+			users[i].PwSalt = EncryptPassword(password)
+			break
+		}
+	}
+
+	file, err := os.Create(config.DataDir + "users.json")
+	if err == nil{
+		enc := json.NewEncoder(file)
+		enc.Encode(users)
+	} else{
+		panic(err)
+	}
+	file.Close()
 }

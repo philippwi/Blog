@@ -1,12 +1,1 @@
-[
-  {
-    "Name": "TestUser",
-    "PwSalt": "123",
-    "ID": 0
-  },
-  {
-    "Name": "hans",
-    "PwSalt": "123",
-    "ID": 1
-  }
-]
+[{"Name":"TestUser","PwSalt":"123","ID":0},{"Name":"hans","PwSalt":"123","ID":1}]
