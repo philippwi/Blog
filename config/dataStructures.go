@@ -2,8 +2,6 @@
 
 package config
 
-//general
-
 /*type UserList struct {
 	Users []User
 }
@@ -14,6 +12,8 @@ type BlogEntryList struct {
 type CommentList struct {
 	Comments []Comment
 }*/
+
+//general
 
 type User struct {
 	Name   string
@@ -42,11 +42,16 @@ type Comment struct {
 type HomeData struct {
 	CurrentUser string
 	BlogEntries []BlogEntry
-//	Message     string
+	//	Message     string
 }
 
 type ViewblogData struct {
 	CurrentUser  string
 	Blog         BlogEntry
 	BlogComments []Comment
+}
+
+type Message struct {
+	MsgText  string
+	Redirect string
 }

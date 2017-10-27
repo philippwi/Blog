@@ -2,8 +2,15 @@
 
 package config
 
-const Port  = ":8080"
+import "time"
+
+
+const DefaultPort = ":8080"
+
+const DefaultCookieAge = 15 * time.Minute
+
+const ServerDir = "server/"
 
 const DataDir = "server/data/"
 
-const ServerDir = "server/"
+const HtmlDir = "server/templates/"

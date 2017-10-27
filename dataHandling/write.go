@@ -74,3 +74,7 @@ func SaveComment(author, text string, blogID int){
 	}
 	file.Close()
 }
+
+func ChangeUserPasswort(name, password string){
+
+}

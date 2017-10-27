@@ -15,13 +15,14 @@ import (
 var tpl *template.Template
 
 func StartServer() {
-	tpl = template.Must(template.ParseGlob("server/*.html"))
-	fmt.Println("Server running: https://localhost" + config.Port)
+	tpl = template.Must(template.ParseGlob(config.HtmlDir + "*.html"))
+	fmt.Println("Server running: https://localhost" + config.DefaultPort)
 	http.HandleFunc("/", loginPage)
 	http.HandleFunc("/home", homePage)
 	http.HandleFunc("/viewblog", viewblogPage)
+	http.HandleFunc("/changepw", ChangePw)
 	http.HandleFunc("/logout", Logout)
-	http.ListenAndServeTLS(config.Port, config.ServerDir+"cert.pem",config.ServerDir+"key.pem", nil)
+	http.ListenAndServeTLS(config.DefaultPort, config.ServerDir+"cert.pem", config.ServerDir+"key.pem", nil)
 }
 
 func loginPage(wr http.ResponseWriter, rq *http.Request) {
@@ -31,12 +32,12 @@ func loginPage(wr http.ResponseWriter, rq *http.Request) {
 
 		if !dataHandling.UserExists(userName) { //Nutzer existiert nicht
 			dataHandling.SaveUser(userName, password)
-			cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(10 * time.Minute)}
+			cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(config.DefaultCookieAge)}
 			http.SetCookie(wr, &cookie)
 			http.Redirect(wr, rq, "/home", http.StatusFound)
 		} else { //Nutzer existiert bereits
 			if dataHandling.PasswordCorrect(userName, password) { //Passwort korrekt
-				cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(10 * time.Minute)}
+				cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(config.DefaultCookieAge)}
 				http.SetCookie(wr, &cookie)
 				http.Redirect(wr, rq, "/home", http.StatusFound)
 			} else { //Passwort falsch
@@ -52,7 +53,7 @@ func homePage(wr http.ResponseWriter, rq *http.Request) {
 
 	if !IsUserLoggedIn(rq) {
 		currentUser = ""
-	}else{
+	} else {
 		currentUser = GetCurrentUsername(rq)
 	}
 
@@ -65,7 +66,9 @@ func homePage(wr http.ResponseWriter, rq *http.Request) {
 		title := rq.FormValue("blgtitle")
 		content := rq.FormValue("blgcont")
 		dataHandling.SaveBlogEntry(author, title, content)
-		http.Redirect(wr, rq, "/home", http.StatusFound)
+		tpl.ExecuteTemplate(wr, "message.html", config.Message{
+			MsgText:  "Blog gespeichert",
+			Redirect: "home"})
 	}
 
 	pageData := config.HomeData{
@@ -81,7 +84,7 @@ func viewblogPage(wr http.ResponseWriter, rq *http.Request) {
 
 	if !IsUserLoggedIn(rq) {
 		currentUser = ""
-	}else{
+	} else {
 		currentUser = GetCurrentUsername(rq)
 	}
 
@@ -90,15 +93,15 @@ func viewblogPage(wr http.ResponseWriter, rq *http.Request) {
 	blog, blogComments := dataHandling.GetBlogWithComments(blogID)
 
 	pageData := config.ViewblogData{
-		CurrentUser: currentUser,
-		Blog: blog,
+		CurrentUser:  currentUser,
+		Blog:         blog,
 		BlogComments: blogComments}
 
 	if rq.Method == http.MethodPost {
 		var author string
-		if currentUser == ""{
-			author = rq.FormValue("nicknm")+" (Leser)"
-		}else{
+		if currentUser == "" {
+			author = rq.FormValue("nicknm") + " (Leser)"
+		} else {
 			author = currentUser
 		}
 		commentText := rq.FormValue("cmnt")
@@ -106,6 +109,56 @@ func viewblogPage(wr http.ResponseWriter, rq *http.Request) {
 		http.Redirect(wr, rq, "/viewblog?ID="+strconv.Itoa(blogID), http.StatusFound)
 	}
 	tpl.ExecuteTemplate(wr, "viewblog.html", pageData)
+}
+
+func ChangePw(wr http.ResponseWriter, rq *http.Request) {
+	var currentUser string
+
+	if !IsUserLoggedIn(rq) {
+		tpl.ExecuteTemplate(wr, "message.html", config.Message{
+			MsgText:  "Session expired",
+			Redirect: "logout"})
+		return
+	} else {
+		currentUser = GetCurrentUsername(rq)
+	}
+
+	if rq.Method == http.MethodPost {
+		if !IsUserLoggedIn(rq) {
+			tpl.ExecuteTemplate(wr, "message.html", config.Message{
+				MsgText:  "Session expired",
+				Redirect: "logout"})
+		} else {
+			oldPw := rq.FormValue("currpw")
+			newPw1 := rq.FormValue("newpw1")
+			newPw2 := rq.FormValue("newpw2")
+
+			if !dataHandling.PasswordCorrect(currentUser, oldPw) {
+				tpl.ExecuteTemplate(wr, "message.html", config.Message{
+					MsgText:  "Passwort falsch",
+					Redirect: "changepw"})
+			} else {
+				if newPw1 == newPw2 {
+					dataHandling.ChangeUserPasswort(currentUser, newPw1)
+					tpl.ExecuteTemplate(wr, "message.html", config.Message{
+						MsgText:  "Passwort geändert",
+						Redirect: "home"})
+				} else {
+					tpl.ExecuteTemplate(wr, "message.html", config.Message{
+						MsgText:  "Passwörter stimmen nicht überein",
+						Redirect: "changepw"})
+				}
+			}
+		}
+	}
+	tpl.ExecuteTemplate(wr, "changepw.html", nil)
+}
+
+func Logout(wr http.ResponseWriter, rq *http.Request) {
+	cookie := http.Cookie{Name: "user", Value: "", Expires: time.Now()}
+	http.SetCookie(wr, &cookie)
+
+	http.Redirect(wr, rq, "/", http.StatusFound)
 }
 
 func IsUserLoggedIn(rq *http.Request) bool {
@@ -128,11 +181,4 @@ func GetCurrentUsername(rq *http.Request) string {
 		return "error"
 	}
 	return cookie.Value
-}
-
-func Logout(wr http.ResponseWriter, rq *http.Request) {
-	cookie := http.Cookie{Name: "user", Value: "", Expires: time.Now()}
-	http.SetCookie(wr, &cookie)
-
-	http.Redirect(wr, rq, "/", http.StatusFound)
 }
