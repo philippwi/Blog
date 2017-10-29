@@ -34,7 +34,7 @@ func SaveBlogEntry(author, title, content string){
 
 	entryData := config.BlogEntry{
 		Author: author,
-		Date: time.Now().Format("20060102"),
+		Date: time.Now().Format("02.01.2006 um 15:04:05"),
 		Title: title,
 		Content: content,
 		ID: NewBlogID(),
@@ -57,7 +57,7 @@ func SaveComment(author, text string, blogID int){
 
 	commentData := config.Comment{
 		Author: author,
-		Date: time.Now().Format("20060102"),
+		Date: time.Now().Format("02.01.2006 um 15:04:05"),
 		Text: text,
 		BlogID: blogID,
 		ID: NewCommentID(),
@@ -75,7 +75,7 @@ func SaveComment(author, text string, blogID int){
 	file.Close()
 }
 
-func ChangeUserPasswort(name, password string){
+func ChangeUserPassword(name, password string){
 
 	users := GetAllUsers()
 
@@ -90,6 +90,49 @@ func ChangeUserPasswort(name, password string){
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(users)
+	} else{
+		panic(err)
+	}
+	file.Close()
+}
+
+func ChangeBlogEntry(content string, id int){
+
+	blogs := GetAllBlogEntries()
+
+	for i,b := range blogs{
+		if b.ID == id{
+			blogs[i].Content = content
+			break
+		}
+	}
+
+	file, err := os.Create(config.DataDir + "blogEntries.json")
+	if err == nil{
+		enc := json.NewEncoder(file)
+		enc.Encode(blogs)
+	} else{
+		panic(err)
+	}
+	file.Close()
+}
+
+func DeleteBlogEntry(id int){
+	blogs := GetAllBlogEntries()
+
+	var newBlogList []config.BlogEntry
+
+	for _,b := range blogs{
+		if b.ID == id{
+			continue
+		}
+		newBlogList = append(newBlogList, b)
+	}
+
+	file, err := os.Create(config.DataDir + "blogEntries.json")
+	if err == nil{
+		enc := json.NewEncoder(file)
+		enc.Encode(newBlogList)
 	} else{
 		panic(err)
 	}

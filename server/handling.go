@@ -18,10 +18,12 @@ func StartServer() {
 	tpl = template.Must(template.ParseGlob(config.HtmlDir + "*.html"))
 	fmt.Println("Server running: https://localhost" + config.DefaultPort)
 	http.HandleFunc("/", loginPage)
+	http.HandleFunc("/changepw", changePw)
 	http.HandleFunc("/home", homePage)
 	http.HandleFunc("/viewblog", viewblogPage)
-	http.HandleFunc("/changepw", ChangePw)
-	http.HandleFunc("/logout", Logout)
+	http.HandleFunc("/editblog", edtBlg)
+	http.HandleFunc("/deleteblog", dltBlog)
+	http.HandleFunc("/logout", logout)
 	http.ListenAndServeTLS(config.DefaultPort, config.ServerDir+"cert.pem", config.ServerDir+"key.pem", nil)
 }
 
@@ -51,14 +53,14 @@ func loginPage(wr http.ResponseWriter, rq *http.Request) {
 func homePage(wr http.ResponseWriter, rq *http.Request) {
 	var currentUser string
 
-	if !IsUserLoggedIn(rq) {
+	if !isUserLoggedIn(rq) {
 		currentUser = ""
 	} else {
-		currentUser = GetCurrentUsername(rq)
+		currentUser = getCurrentUsername(rq)
 	}
 
 	if rq.Method == http.MethodPost {
-		if !IsUserLoggedIn(rq) {
+		if !isUserLoggedIn(rq) {
 			http.Redirect(wr, rq, "/", http.StatusFound)
 			return
 		}
@@ -82,10 +84,10 @@ func homePage(wr http.ResponseWriter, rq *http.Request) {
 func viewblogPage(wr http.ResponseWriter, rq *http.Request) {
 	var currentUser string
 
-	if !IsUserLoggedIn(rq) {
+	if !isUserLoggedIn(rq) {
 		currentUser = ""
 	} else {
-		currentUser = GetCurrentUsername(rq)
+		currentUser = getCurrentUsername(rq)
 	}
 
 	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
@@ -108,23 +110,72 @@ func viewblogPage(wr http.ResponseWriter, rq *http.Request) {
 		dataHandling.SaveComment(author, commentText, blog.ID)
 		http.Redirect(wr, rq, "/viewblog?ID="+strconv.Itoa(blogID), http.StatusFound)
 	}
+
 	tpl.ExecuteTemplate(wr, "viewblog.html", pageData)
 }
 
-func ChangePw(wr http.ResponseWriter, rq *http.Request) {
+func edtBlg(wr http.ResponseWriter, rq *http.Request) {
 	var currentUser string
 
-	if !IsUserLoggedIn(rq) {
+	if !isUserLoggedIn(rq) {
+		currentUser = ""
+	} else {
+		currentUser = getCurrentUsername(rq)
+	}
+
+	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
+
+	blogContent := dataHandling.GetBlog(blogID).Content
+
+	pageData := config.ChangeblogData{
+		CurrentUser: currentUser,
+		BlogContent: blogContent,
+	}
+
+	if rq.Method == http.MethodPost {
+		if !isUserLoggedIn(rq) {
+			tpl.ExecuteTemplate(wr, "message.html", config.Message{
+				MsgText:  "Session expired",
+				Redirect: "logout"})
+		} else {
+			newContent := rq.FormValue("blgcont")
+			dataHandling.ChangeBlogEntry(newContent, blogID)
+			http.Redirect(wr, rq, "/viewblog?ID="+strconv.Itoa(blogID), http.StatusFound)
+		}
+	}
+
+	tpl.ExecuteTemplate(wr, "editblog.html", pageData)
+}
+
+func dltBlog(wr http.ResponseWriter, rq *http.Request) {
+
+	if !isUserLoggedIn(rq) {
+		tpl.ExecuteTemplate(wr, "message.html", config.Message{
+			MsgText:  "Session expired",
+			Redirect: "logout"})
+		return
+	}
+
+	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
+
+	dataHandling.DeleteBlogEntry(blogID)
+	http.Redirect(wr, rq, "/home", http.StatusFound)
+}
+
+func changePw(wr http.ResponseWriter, rq *http.Request) {
+	var currentUser string
+
+	if !isUserLoggedIn(rq) {
 		tpl.ExecuteTemplate(wr, "message.html", config.Message{
 			MsgText:  "Session expired",
 			Redirect: "logout"})
 		return
 	} else {
-		currentUser = GetCurrentUsername(rq)
+		currentUser = getCurrentUsername(rq)
 	}
 
 	if rq.Method == http.MethodPost {
-		if !IsUserLoggedIn(rq) {
+		if !isUserLoggedIn(rq) {
 			tpl.ExecuteTemplate(wr, "message.html", config.Message{
 				MsgText:  "Session expired",
 				Redirect: "logout"})
@@ -139,7 +190,7 @@ func ChangePw(wr http.ResponseWriter, rq *http.Request) {
 					Redirect: "changepw"})
 			} else {
 				if newPw1 == newPw2 {
-					dataHandling.ChangeUserPasswort(currentUser, newPw1)
+					dataHandling.ChangeUserPassword(currentUser, newPw1)
 					tpl.ExecuteTemplate(wr, "message.html", config.Message{
 						MsgText:  "Passwort geändert",
 						Redirect: "home"})
@@ -154,14 +205,14 @@ func ChangePw(wr http.ResponseWriter, rq *http.Request) {
 	tpl.ExecuteTemplate(wr, "changepw.html", nil)
 }
 
-func Logout(wr http.ResponseWriter, rq *http.Request) {
+func logout(wr http.ResponseWriter, rq *http.Request) {
 	cookie := http.Cookie{Name: "user", Value: "", Expires: time.Now()}
 	http.SetCookie(wr, &cookie)
 
 	http.Redirect(wr, rq, "/", http.StatusFound)
 }
 
-func IsUserLoggedIn(rq *http.Request) bool {
+func isUserLoggedIn(rq *http.Request) bool {
 	cookie, err := rq.Cookie("user")
 
 	if err != nil {
@@ -175,7 +226,7 @@ func IsUserLoggedIn(rq *http.Request) bool {
 	return true
 }
 
-func GetCurrentUsername(rq *http.Request) string {
+func getCurrentUsername(rq *http.Request) string {
 	cookie, err := rq.Cookie("user")
 	if err != nil {
 		return "error"

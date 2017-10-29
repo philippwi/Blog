@@ -19,13 +19,13 @@ func GetAllBlogEntries() []config.BlogEntry{
 	data, _ := ioutil.ReadFile(config.DataDir + "blogEntries.json")
 	var blogEntries []config.BlogEntry
 	json.Unmarshal(data, &blogEntries)
-	return blogEntries
+	return SortBlogEntries(blogEntries)
 }
 
 func GetAllComments() []config.Comment {
 	data, _ := ioutil.ReadFile(config.DataDir + "comments.json")
 	var comments []config.Comment
 	json.Unmarshal(data, &comments)
-	return comments
+	return SortComments(comments)
 }
 

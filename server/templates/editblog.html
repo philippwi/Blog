@@ -1,0 +1,22 @@
+<!-- Matrikelnummern: 3229403, 9964427 -->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog bearbeiten</title>
+</head>
+<body>
+
+<p>Aktueller Nutzer: {{.CurrentUser}}</p>
+<a href="changepw">Passwort ändern</a>
+<br>
+
+<form id="edt" method="post">
+    <label>Inhalt</label><br>
+    <textarea name="blgcont" cols="100" rows="5">{{.BlogContent}}</textarea>
+    <input type="submit" value="Eintragen">
+</form>
+
+</body>
+</html>

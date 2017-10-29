@@ -15,24 +15,12 @@
 </script>
 {{end}}
 
-<script>
-    function show() {
-        document.getElementById("edt").style.display="block";
-    }
-</script>
-
 {{if ne .CurrentUser ""}}
 <p>Aktueller Nutzer: {{.CurrentUser}}</p>
 <a href="changepw">Passwort ändern</a>
-<a href="logout">Ausloggen</a>
-
-<button onclick="show()">Blog bearbeiten</button>
-<br>
-<form id="edt" method="edit" hidden>
-    <label>Inhalt</label><br>
-    <textarea name="blgcont" cols="100" rows="5">{{.Blog.Content}}</textarea>
-    <input type="submit" value="Eintragen">
-</form>
+<a href="logout">Ausloggen</a><br>
+<a href="deleteblog?ID={{.Blog.ID}}">Löschen</a><br>
+<a href="editblog?ID={{.Blog.ID}}">Bearbeiten</a><br>
 {{end}}
 
 
@@ -46,6 +34,7 @@
 <ul>
     {{range .BlogComments}}
     <li>{{.Text}}<br>
+        erstellt {{.Date}}<br>
         von {{.Author}}<br>
         <br>
     </li>
@@ -62,8 +51,6 @@
     <textarea name="cmnt" cols="70" rows="5"></textarea>
     <input type="submit" value="Abschicken">
 </form>
-
-
 
 </body>
 </html>

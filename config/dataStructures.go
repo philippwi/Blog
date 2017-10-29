@@ -51,6 +51,11 @@ type ViewblogData struct {
 	BlogComments []Comment
 }
 
+type ChangeblogData struct {
+	CurrentUser string
+	BlogContent string
+}
+
 type Message struct {
 	MsgText  string
 	Redirect string

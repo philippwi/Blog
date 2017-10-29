@@ -1,1 +1,9 @@
-[{"Author":"TestUser","Date":"20171024","Text":"aaa","BlogID":1,"ID":1},{"Author":"hans","Date":"20171026","Text":"lol","BlogID":1,"ID":2},{"Author":"Anonym","Date":"20171026","Text":"lol","BlogID":1,"ID":3},{"Author":"Anonym","Date":"20171026","Text":"fuck","BlogID":4,"ID":4},{"Author":" (Leser)","Date":"20171026","Text":"lol","BlogID":4,"ID":5},{"Author":"farid (Leser)","Date":"20171026","Text":"lol","BlogID":4,"ID":6}]
+[
+  {
+    "Author": "TestUser",
+    "Date": "20.11.2017 um 20:51:13",
+    "Text": "aaa",
+    "BlogID": 1,
+    "ID": 1
+  }
+]

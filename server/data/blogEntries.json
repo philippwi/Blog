@@ -1,1 +1,23 @@
-[{"Author":"TestUser","Date":"20171023","Title":"TestBlog","Content":"Test test test","ID":1},{"Author":"TestUser","Date":"20171024","Title":"neu","Content":"abcde","ID":2},{"Author":"TestUser","Date":"20171024","Title":"cfascsecfverk","Content":"fkerfkerknerfne","ID":3},{"Author":"TestUser","Date":"20171024","Title":"2-Schritt-Verifizierung: Google macht Prompt zum Standard ","Content":" Bisher stellten SMS die Default-Einstellung für Googles Verifizierung in zwei Schritten dar. Sie werden jetzt vom so genannten Prompt abgelöst, der ganz ohne Bestätigungscodes auskommt.\r\n\r\nInhaber eines Google-Kontos, die sich erstmals für die Aktivierung der 2-Schritt-Verifizierung (englisch: 2-Step Verification, 2SV) zum Einloggen in ihr Konto entscheiden, werden ab sofort standardmäßig mit dem Sicherheitsmechanismus Google Prompt als zweitem Verifizierungsschritt geschützt. Damit löst Prompt die Verifizierung per SMS als Default-Einstellung ab.\r\n\r\nDer im Juli dieses Jahres eingeführte Prompt-Mechanismus ist an ein vorab übers Google-Konto registriertes Smartphone des Nutzers gekoppelt. Im Anschluss an die reguläre Passworteingabe sendet Google als zweiten Verifizierungsschritt eine Mitteilung an das mobile Gerät. Darin wird der Nutzer gefragt, ob er gerade versucht habe, sich anzumelden. Er kann dies durch Antippen einer Schaltfläche bestätigen oder – etwa im Falle eines Identitätsmissbrauch – verneinen, um den (Fremd-)Zugriff zu blockieren.","ID":4},{"Author":"TestUser","Date":"20171024","Title":"ID test","Content":"lololo","ID":5},{"Author":"TestUser","Date":"20171024","Title":"dda","Content":"sddd","ID":6},{"Author":"hans","Date":"20171025","Title":"lollo","Content":"testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest","ID":7},{"Author":"hans","Date":"20171027","Title":"aaaaaaaa","Content":"oooo","ID":8},{"Author":"hans","Date":"20171027","Title":"cnfrjnrf","Content":"fijewifh","ID":9}]
+[
+  {
+    "Author": "TestUser",
+    "Date": "20.10.2018 um 20:51:13",
+    "Title": "TestBlog",
+    "Content": "Test test test",
+    "ID": 1
+  },
+  {
+    "Author": "hans",
+    "Date": "29.10.2017 um 20:51:13",
+    "Title": "f or l",
+    "Content": "dadads",
+    "ID": 3
+  },
+  {
+    "Author": "hans",
+    "Date": "29.10.2018 um 20:51:13",
+    "Title": "ferfref",
+    "Content": "gregreg",
+    "ID": 2
+  }
+]
