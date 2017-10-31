@@ -2,12 +2,10 @@
 
 package config
 
-import "time"
 
+const DefaultPort = "8080"
 
-const DefaultPort = ":8080"
-
-const DefaultCookieAge = 15 * time.Minute
+const DefaultCookieAge = 15
 
 const ServerDir = "server/"
 

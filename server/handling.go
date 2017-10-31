@@ -14,9 +14,12 @@ import (
 
 var tpl *template.Template
 
-func StartServer() {
+var sesExp time.Duration
+
+func StartServer(sessionExp int, port string) {
+	sesExp = time.Duration(sessionExp) * time.Minute
 	tpl = template.Must(template.ParseGlob(config.HtmlDir + "*.html"))
-	fmt.Println("Server running: https://localhost" + config.DefaultPort)
+	fmt.Println("Server running: https://localhost:" + port)
 	http.HandleFunc("/", loginPage)
 	http.HandleFunc("/changepw", changePw)
 	http.HandleFunc("/home", homePage)
@@ -24,7 +27,7 @@ func StartServer() {
 	http.HandleFunc("/editblog", edtBlg)
 	http.HandleFunc("/deleteblog", dltBlog)
 	http.HandleFunc("/logout", logout)
-	http.ListenAndServeTLS(config.DefaultPort, config.ServerDir+"cert.pem", config.ServerDir+"key.pem", nil)
+	http.ListenAndServeTLS(":"+port, config.ServerDir+"cert.pem", config.ServerDir+"key.pem", nil)
 }
 
 func loginPage(wr http.ResponseWriter, rq *http.Request) {
@@ -34,12 +37,12 @@ func loginPage(wr http.ResponseWriter, rq *http.Request) {
 
 		if !dataHandling.UserExists(userName) { //Nutzer existiert nicht
 			dataHandling.SaveUser(userName, password)
-			cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(config.DefaultCookieAge)}
+			cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
 			http.SetCookie(wr, &cookie)
 			http.Redirect(wr, rq, "/home", http.StatusFound)
 		} else { //Nutzer existiert bereits
 			if dataHandling.PasswordCorrect(userName, password) { //Passwort korrekt
-				cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(config.DefaultCookieAge)}
+				cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
 				http.SetCookie(wr, &cookie)
 				http.Redirect(wr, rq, "/home", http.StatusFound)
 			} else { //Passwort falsch
