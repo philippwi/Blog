@@ -18,7 +18,7 @@ func main() {
 
 	fmt.Println(
 		"Port: " + *port +
-			"Session: " + strconv.Itoa(*sessionExp) + " minutes")
+			"\nSession: " + strconv.Itoa(*sessionExp) + " minutes")
 
 	server.StartServer(*sessionExp, *port)
 }
