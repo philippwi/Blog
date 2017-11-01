@@ -23,7 +23,7 @@ type Comment struct {
 	Date   string
 	Text   string
 	BlogID int
-	ID     int
+//	ID     int
 }
 
 //page specific

@@ -1,5 +1,12 @@
 [
   {
+    "Author": "TestUser",
+    "Date": "01.01.2000 um 11:11:11",
+    "Title": "TestBlog",
+    "Content": "TestText",
+    "ID": 0
+  },
+  {
     "Author": "hans",
     "Date": "29.10.2018 um 20:51:13",
     "Title": "ferfref",

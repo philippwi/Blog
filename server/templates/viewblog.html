@@ -46,9 +46,9 @@
     <label>Neuer Kommentar</label><br>
     {{if eq .CurrentUser ""}}
     <label for="nck">Nickname</label>
-    <input type="text" name="nicknm" id="nck"><br>
+    <input type="text" name="nicknm" id="nck" minlength="1" maxlength="10"><br>
     {{end}}
-    <textarea name="cmnt" cols="70" rows="5"></textarea>
+    <textarea name="cmnt" cols="70" rows="5" minlength="5"></textarea>
     <input type="submit" value="Abschicken">
 </form>
 

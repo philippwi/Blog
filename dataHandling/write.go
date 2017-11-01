@@ -60,7 +60,7 @@ func SaveComment(author, text string, blogID int){
 		Date: time.Now().Format("02.01.2006 um 15:04:05"),
 		Text: text,
 		BlogID: blogID,
-		ID: NewCommentID(),
+//		ID: NewCommentID(),
 	}
 
 	comments = append(comments, commentData)

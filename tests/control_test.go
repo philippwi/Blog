@@ -1,16 +1,16 @@
 //Matrikelnummern: 3229403, 9964427
 
-package dataHandling
+package tests
 
 import (
 	"Blog/utility"
-	"Blog/config"
 	"sort"
 	"time"
 	"strconv"
+	"testing"
 )
 
-func UserExists(name string) bool {
+func TestUserExists(t *testing.T){
 	existingUsers := GetAllUsers()
 
 	for _, user := range existingUsers {
@@ -21,7 +21,7 @@ func UserExists(name string) bool {
 	return false
 }
 
-func PasswordCorrect(name, password string) bool {
+func TestPasswordCorrect(t *testing.T){
 	existingUsers := GetAllUsers()
 
 	for _, user := range existingUsers {
@@ -32,15 +32,15 @@ func PasswordCorrect(name, password string) bool {
 	return false
 }
 
-func EncryptPassword(pw string) string {
+func TestEncryptPassword(t *testing.T) {
 	return pw
 }
 
-func DecryptPassword(code string) string {
+func TestDecryptPassword(t *testing.T){
 	return code
 }
 
-func GetBlog(blogID int) (blog config.BlogEntry) {
+func TestGetBlog(t *testing.T){
 
 	allBlogEntries := GetAllBlogEntries()
 
@@ -53,7 +53,7 @@ func GetBlog(blogID int) (blog config.BlogEntry) {
 	return blog
 }
 
-func GetBlogWithComments(blogID int) (blog config.BlogEntry, blogComments []config.Comment) {
+func TestGetBlogWithComments(t *testing.T){
 
 	allBlogEntries := GetAllBlogEntries()
 	allComments := GetAllComments()
@@ -74,24 +74,11 @@ func GetBlogWithComments(blogID int) (blog config.BlogEntry, blogComments []conf
 	return blog, blogComments
 }
 
-/*func NewUserID() int {
-	users := GetAllUsers()
-	x := 1
+/*func TestNewUserID(t *testing.T){
 
-	var assignedIDs []int
-
-	for _, u := range users {
-		assignedIDs = append(assignedIDs, u.ID)
-	}
-
-	for utility.IsIntInArray(x, assignedIDs) {
-		x++
-	}
-
-	return x
 }*/
 
-func NewBlogID() int {
+func TestNewBlogID(t *testing.T){
 	blogEntries := GetAllBlogEntries()
 	x := 1
 
@@ -108,7 +95,7 @@ func NewBlogID() int {
 	return x
 }
 
-/*func NewCommentID() int {
+func TestNewCommentID(t *testing.T){
 	commentList := GetAllComments()
 
 	x := 1
@@ -124,9 +111,9 @@ func NewBlogID() int {
 	}
 
 	return x
-}*/
+}
 
-func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
+func TestSortBlogEntries(t *testing.T){
 
 	sort.Slice(entries, func(i, j int) bool {
 		date1, _ := time.Parse("02.01.2006 um 15:04:05", entries[i].Date)
@@ -140,7 +127,7 @@ func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
 	return entries
 }
 
-func SortComments(comments []config.Comment) []config.Comment {
+func TestSortComments(t *testing.T){
 
 	sort.Slice(comments, func(i, j int) bool {
 		date1, _ := time.Parse("02.01.2006 um 15:04:05", comments[i].Date)
