@@ -15,7 +15,7 @@ func SaveUser(name, password string){
 	userData := config.User{
 		Name:   name,
 		PwSalt: EncryptPassword(password),
-		ID:     NewUserID(),
+		//ID:     NewUserID(),
 	}
 	users = append(users, userData)
 

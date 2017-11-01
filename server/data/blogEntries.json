@@ -1,1 +1,23 @@
-[{"Author":"hans","Date":"29.10.2018 um 20:51:13","Title":"ferfref","Content":"awffaegregergregtregtregtrgtrsfvf gre","ID":2},{"Author":"TestUser","Date":"20.10.2018 um 20:51:13","Title":"TestBlog","Content":"Test test test","ID":1},{"Author":"hans","Date":"29.10.2017 um 20:51:13","Title":"f or l","Content":"dadads","ID":3}]
+[
+  {
+    "Author": "hans",
+    "Date": "29.10.2018 um 20:51:13",
+    "Title": "ferfref",
+    "Content": "awffaegregergregtregtregtrgtrsfvf grea",
+    "ID": 2
+  },
+  {
+    "Author": "TestUser",
+    "Date": "20.10.2018 um 20:51:13",
+    "Title": "TestBlog",
+    "Content": "Test test test",
+    "ID": 1
+  },
+  {
+    "Author": "hans",
+    "Date": "29.10.2017 um 20:51:13",
+    "Title": "f or l",
+    "Content": "dadads",
+    "ID": 3
+  }
+]

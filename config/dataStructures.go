@@ -2,23 +2,12 @@
 
 package config
 
-/*type UserList struct {
-	Users []User
-}
-type BlogEntryList struct {
-	BlogEntries []BlogEntry
-}
-
-type CommentList struct {
-	Comments []Comment
-}*/
-
 //general
 
 type User struct {
 	Name   string
 	PwSalt string
-	ID     int
+//	ID     int
 }
 
 type BlogEntry struct {
@@ -42,7 +31,6 @@ type Comment struct {
 type HomeData struct {
 	CurrentUser string
 	BlogEntries []BlogEntry
-	//	Message     string
 }
 
 type ViewblogData struct {

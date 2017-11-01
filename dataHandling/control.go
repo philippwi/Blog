@@ -74,7 +74,7 @@ func GetBlogWithComments(blogID int) (blog config.BlogEntry, blogComments []conf
 	return blog, blogComments
 }
 
-func NewUserID() int {
+/*func NewUserID() int {
 	users := GetAllUsers()
 	x := 1
 
@@ -89,7 +89,7 @@ func NewUserID() int {
 	}
 
 	return x
-}
+}*/
 
 func NewBlogID() int {
 	blogEntries := GetAllBlogEntries()
