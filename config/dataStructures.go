@@ -7,7 +7,6 @@ package config
 type User struct {
 	Name   string
 	PwSalt string
-//	ID     int
 }
 
 type BlogEntry struct {
@@ -23,7 +22,6 @@ type Comment struct {
 	Date   string
 	Text   string
 	BlogID int
-//	ID     int
 }
 
 //page specific

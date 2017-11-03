@@ -24,13 +24,13 @@
 
 <ul>
     {{range .BlogEntries}}
-    {{if .ID ne 0}}
-    <li><a href="viewblog?ID={{.ID}}">{{.Title}}</a><br>
-        erstellt {{.Date}}<br>
-        von {{.Author}}<br>
-        <br>
-    </li>
-    {{end}}
+        {{if ne .ID 0}}
+        <li><a href="viewblog?ID={{.ID}}">{{.Title}}</a><br>
+            erstellt {{.Date}}<br>
+            von {{.Author}}<br>
+            <br>
+        </li>
+        {{end}}
     {{end}}
 </ul>
 

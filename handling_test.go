@@ -1,6 +1,9 @@
 //Matrikelnummern: 3229403, 9964427
 
-package tests
+package main
+
+
+
 /*
 import (
 	"fmt"
@@ -10,6 +13,8 @@ import (
 	"Blog/dataHandling"
 	"strconv"
 	"time"
+	"testing"
+	"Blog/server"
 )
 
 var tpl *template.Template
@@ -229,11 +234,11 @@ func isUserLoggedIn(rq *http.Request) bool {
 	return true
 }
 
-func getCurrentUsername(rq *http.Request) string {
-	cookie, err := rq.Cookie("user")
-	if err != nil {
-		return "error"
+func TestGetCurrentUsername(t *testing.T) {
+	cookie := http.Cookie{Name: "user", Value: TestUserName, Expires: time.Now()}
+	http.SetCookie(nil, &cookie)
+
+	if server.GetCurrentUsername()= TestUserName{
+		t.Error("")
 	}
-	return cookie.Value
-}
-*/
+}*/

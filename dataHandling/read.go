@@ -29,3 +29,36 @@ func GetAllComments() []config.Comment {
 	return SortComments(comments)
 }
 
+func GetBlog(blogID int) (blog config.BlogEntry) {
+
+	allBlogEntries := GetAllBlogEntries()
+
+	for _, b := range allBlogEntries {
+		if b.ID == blogID {
+			blog = b
+			break
+		}
+	}
+	return blog
+}
+
+func GetBlogWithComments(blogID int) (blog config.BlogEntry, blogComments []config.Comment) {
+
+	allBlogEntries := GetAllBlogEntries()
+	allComments := GetAllComments()
+
+	for _, b := range allBlogEntries {
+		if b.ID == blogID {
+			blog = b
+			break
+		}
+	}
+
+	for _, c := range allComments {
+		if c.BlogID == blogID {
+			blogComments = append(blogComments, c)
+		}
+	}
+
+	return blog, blogComments
+}
