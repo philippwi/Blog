@@ -13,14 +13,16 @@ import (
 	"Blog/utility"
 )
 
+//Variable zur HTML Template Nutzung
 var tpl *template.Template
 
+//Variable zum Speichern der festgelegten Sitzungsdauer
 var sesExp time.Duration
 
+//initialisiert nötige Einstellungen und startet HTTPS Server
 func StartServer(sessionExp int, port string) {
 	sesExp = time.Duration(sessionExp) * time.Minute
 	tpl = template.Must(template.ParseGlob(utility.FixPath(config.HtmlDir) + "*.html"))
-	fmt.Println("Server running: https://localhost:" + port)
 	http.HandleFunc("/", LoginPage)
 	http.HandleFunc("/changepw", ChangePw)
 	http.HandleFunc("/home", HomePage)
@@ -31,6 +33,7 @@ func StartServer(sessionExp int, port string) {
 	http.ListenAndServeTLS(":"+port, utility.FixPath(config.ServerDir)+"cert.pem", config.ServerDir+"key.pem", nil)
 }
 
+//Anmeldeseite mit Login-Eingabe-Verarbeitung
 func LoginPage(wr http.ResponseWriter, rq *http.Request) {
 	if rq.Method == http.MethodPost {
 		userName := rq.FormValue("usrnm")
@@ -54,6 +57,7 @@ func LoginPage(wr http.ResponseWriter, rq *http.Request) {
 	tpl.ExecuteTemplate(wr, "index.html", nil)
 }
 
+//Homepage zur Darstellung der Blogübersicht mit Möglichkeit der Blogerstellung
 func HomePage(wr http.ResponseWriter, rq *http.Request) {
 	var currentUser string
 
@@ -85,6 +89,7 @@ func HomePage(wr http.ResponseWriter, rq *http.Request) {
 	tpl.ExecuteTemplate(wr, "home.html", pageData)
 }
 
+//Darstellung eines bestimmten Blogs mit Bearbeitungs-, Kommentar- und Löschmöglichkeit
 func ViewblogPage(wr http.ResponseWriter, rq *http.Request) {
 	var currentUser string
 
@@ -118,6 +123,7 @@ func ViewblogPage(wr http.ResponseWriter, rq *http.Request) {
 	tpl.ExecuteTemplate(wr, "viewblog.html", pageData)
 }
 
+//Änderung des Bloginhaltes
 func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 	var currentUser string
 
@@ -151,6 +157,7 @@ func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 	tpl.ExecuteTemplate(wr, "editblog.html", pageData)
 }
 
+//Löschung eines Blogeintrages
 func DltBlog(wr http.ResponseWriter, rq *http.Request) {
 
 	if !IsUserLoggedIn(rq) {
@@ -166,6 +173,7 @@ func DltBlog(wr http.ResponseWriter, rq *http.Request) {
 	http.Redirect(wr, rq, "/home", http.StatusFound)
 }
 
+//Nutzerpasswort prüfen und ändern
 func ChangePw(wr http.ResponseWriter, rq *http.Request) {
 	var currentUser string
 
@@ -209,6 +217,7 @@ func ChangePw(wr http.ResponseWriter, rq *http.Request) {
 	tpl.ExecuteTemplate(wr, "changepw.html", nil)
 }
 
+//Sitzung eines angemeldeten Nutzers beenden
 func Logout(wr http.ResponseWriter, rq *http.Request) {
 	cookie := http.Cookie{Name: "user", Value: "", Expires: time.Now()}
 	http.SetCookie(wr, &cookie)
@@ -216,6 +225,7 @@ func Logout(wr http.ResponseWriter, rq *http.Request) {
 	http.Redirect(wr, rq, "/", http.StatusFound)
 }
 
+//testet ob Aufrufer ein angemeldeter Nutzer ist
 func IsUserLoggedIn(rq *http.Request) bool {
 	cookie, err := rq.Cookie("user")
 
@@ -230,6 +240,7 @@ func IsUserLoggedIn(rq *http.Request) bool {
 	return true
 }
 
+//liefert Name des aktuell angemelden Nutzers
 func GetCurrentUsername(rq *http.Request) string {
 	cookie, err := rq.Cookie("user")
 	if err != nil {

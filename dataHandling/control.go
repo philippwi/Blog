@@ -10,6 +10,7 @@ import (
 	"strconv"
 )
 
+//testet ob übergebener Nutzername existiert
 func UserExists(name string) bool {
 	existingUsers := GetAllUsers()
 
@@ -21,6 +22,7 @@ func UserExists(name string) bool {
 	return false
 }
 
+//testet ob Nutzer-Passwort komination korrekt ist
 func PasswordCorrect(name, password string) bool {
 	existingUsers := GetAllUsers()
 
@@ -32,33 +34,17 @@ func PasswordCorrect(name, password string) bool {
 	return false
 }
 
+//verchlüsselt Passwort
 func EncryptPassword(pw string) string {
 	return pw
 }
 
+//entschlüsselt Passwort
 func DecryptPassword(code string) string {
 	return code
 }
 
-
-
-/*func NewUserID() int {
-	users := GetAllUsers()
-	x := 1
-
-	var assignedIDs []int
-
-	for _, u := range users {
-		assignedIDs = append(assignedIDs, u.ID)
-	}
-
-	for utility.IsIntInArray(x, assignedIDs) {
-		x++
-	}
-
-	return x
-}*/
-
+//generiert freie ID für einen Blogeintrag
 func NewBlogID() int {
 	blogEntries := GetAllBlogEntries()
 	x := 1
@@ -76,24 +62,7 @@ func NewBlogID() int {
 	return x
 }
 
-/*func NewCommentID() int {
-	commentList := GetAllComments()
-
-	x := 1
-
-	var assignedIDs []int
-
-	for _, c := range commentList {
-		assignedIDs = append(assignedIDs, c.ID)
-	}
-
-	for utility.IsIntInArray(x, assignedIDs) {
-		x++
-	}
-
-	return x
-}*/
-
+//sortiert Blogeinträge nach Datum (von neu nach alt)
 func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
 
 	sort.Slice(entries, func(i, j int) bool {
@@ -104,10 +73,10 @@ func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
 		date2int, _ := strconv.Atoi(date2.Format("20060102150405"))
 		return date1int > date2int
 	})
-
 	return entries
 }
 
+//sortiert Kommentare nach Datum (von neu nach alt)
 func SortComments(comments []config.Comment) []config.Comment {
 
 	sort.Slice(comments, func(i, j int) bool {
@@ -118,6 +87,5 @@ func SortComments(comments []config.Comment) []config.Comment {
 		date2int, _ := strconv.Atoi(date2.Format("20060102150405"))
 		return date1int > date2int
 	})
-
 	return comments
 }

@@ -4,6 +4,7 @@ package utility
 
 import "os"
 
+//testet ob eine Zahl in einer Zahlenreihe vorhanden ist
 func IsIntInArray(number int, list []int) bool{
 	for _, x := range list {
 		if x == number {
@@ -13,6 +14,8 @@ func IsIntInArray(number int, list []int) bool{
 	return false
 }
 
+//korrigiert Pfade
+//benötigt für korrekten Testablauf
 func FixPath(path string) string{
 	wd,_ := os.Getwd()
 

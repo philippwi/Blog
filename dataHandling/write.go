@@ -10,6 +10,7 @@ import (
 	"Blog/utility"
 )
 
+//speichert Nutzer in .json Datei
 func SaveUser(name, password string){
 	users := GetAllUsers()
 
@@ -30,6 +31,7 @@ func SaveUser(name, password string){
 	file.Close()
 }
 
+//speichert Blogeintrag in .json Datei
 func SaveBlogEntry(author, title, content string){
 	entries := GetAllBlogEntries()
 
@@ -53,6 +55,7 @@ func SaveBlogEntry(author, title, content string){
 	file.Close()
 }
 
+//speichert Kommentar in .json Datei
 func SaveComment(author, text string, blogID int){
 	comments := GetAllComments()
 
@@ -76,6 +79,7 @@ func SaveComment(author, text string, blogID int){
 	file.Close()
 }
 
+//ändert Passwort eines bestimmten Nutzer
 func ChangeUserPassword(name, password string){
 
 	users := GetAllUsers()
@@ -97,6 +101,7 @@ func ChangeUserPassword(name, password string){
 	file.Close()
 }
 
+//ändert Inhalt eines bestimmten Blogeintrages
 func ChangeBlogEntry(content string, id int){
 
 	blogs := GetAllBlogEntries()
@@ -118,6 +123,7 @@ func ChangeBlogEntry(content string, id int){
 	file.Close()
 }
 
+//löscht bestimmten Blogeintrag aus .json Datei
 func DeleteBlogEntry(id int){
 	blogs := GetAllBlogEntries()
 
