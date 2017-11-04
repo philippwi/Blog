@@ -1,6 +1,6 @@
 //Matrikelnummern: 3229403, 9964427
 
-package main
+package server
 
 
 

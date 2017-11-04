@@ -1,24 +1,24 @@
 //Matrikelnummern: 3229403, 9964427
 
-package main
+package dataHandling
 
 import (
 	"Blog/config"
 	"io/ioutil"
 	"encoding/json"
 	"testing"
-	"Blog/dataHandling"
+	"Blog/utility"
 )
 
 //Testblog mit ID=0 und Autor=TestUser muss in blogEntries.json existieren!
 //Testkommentar mit BlogID=0 und Autor=TestUser muss in comments.json existieren!
 
 func TestGetAllUsers(t *testing.T) {
-	data, _ := ioutil.ReadFile(config.DataDir + "users.json")
+	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "users.json")
 	var actualUsers []config.User
 	json.Unmarshal(data, &actualUsers)
 
-	readUsers := dataHandling.GetAllUsers()
+	readUsers := GetAllUsers()
 
 	if len(actualUsers) != len(readUsers) {
 		t.Error("Nutzerdaten wurden nicht korrekt gelesen")
@@ -26,13 +26,13 @@ func TestGetAllUsers(t *testing.T) {
 }
 
 func TestGetAllBlogEntries(t *testing.T) {
-	data, _ := ioutil.ReadFile(config.DataDir + "blogEntries.json")
+	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "blogEntries.json")
 	var actualBlogs []config.BlogEntry
 	json.Unmarshal(data, &actualBlogs)
 
-	actualBlogs = dataHandling.SortBlogEntries(actualBlogs)
+	actualBlogs = SortBlogEntries(actualBlogs)
 
-	readBlogs := dataHandling.GetAllBlogEntries()
+	readBlogs := GetAllBlogEntries()
 
 	if len(actualBlogs) != len(readBlogs) {
 		t.Error("Blogdaten wurden nicht korrekt gelesen")
@@ -40,13 +40,13 @@ func TestGetAllBlogEntries(t *testing.T) {
 }
 
 func TestGetAllComments(t *testing.T) {
-	data, _ := ioutil.ReadFile(config.DataDir + "comments.json")
+	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "comments.json")
 	var actualComments []config.Comment
 	json.Unmarshal(data, &actualComments)
 
-	actualComments = dataHandling.SortComments(actualComments)
+	actualComments = SortComments(actualComments)
 
-	readComments := dataHandling.GetAllComments()
+	readComments := GetAllComments()
 
 	if len(actualComments) != len(readComments) {
 		t.Error("Blogdaten wurden nicht korrekt gelesen")
@@ -55,7 +55,7 @@ func TestGetAllComments(t *testing.T) {
 
 func TestGetBlog(t *testing.T) {
 
-	blog := dataHandling.GetBlog(0)
+	blog := GetBlog(0)
 
 	if blog.Author != TestUserName {
 		t.Error("Testblog von TestUser wurde nicht gefunden")
@@ -64,7 +64,7 @@ func TestGetBlog(t *testing.T) {
 
 func TestGetBlogWithComments(t *testing.T) {
 	//Testet nur den GetComment-Teil, GetBlog hat eigenen Test
-	_, blogComments := dataHandling.GetBlogWithComments(0)
+	_, blogComments := GetBlogWithComments(0)
 
 	success := false
 

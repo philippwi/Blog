@@ -10,6 +10,7 @@ import (
 	"Blog/dataHandling"
 	"strconv"
 	"time"
+	"Blog/utility"
 )
 
 var tpl *template.Template
@@ -18,7 +19,7 @@ var sesExp time.Duration
 
 func StartServer(sessionExp int, port string) {
 	sesExp = time.Duration(sessionExp) * time.Minute
-	tpl = template.Must(template.ParseGlob(config.HtmlDir + "*.html"))
+	tpl = template.Must(template.ParseGlob(utility.FixPath(config.HtmlDir) + "*.html"))
 	fmt.Println("Server running: https://localhost:" + port)
 	http.HandleFunc("/", LoginPage)
 	http.HandleFunc("/changepw", ChangePw)
@@ -27,7 +28,7 @@ func StartServer(sessionExp int, port string) {
 	http.HandleFunc("/editblog", EdtBlg)
 	http.HandleFunc("/deleteblog", DltBlog)
 	http.HandleFunc("/logout", Logout)
-	http.ListenAndServeTLS(":"+port, config.ServerDir+"cert.pem", config.ServerDir+"key.pem", nil)
+	http.ListenAndServeTLS(":"+port, utility.FixPath(config.ServerDir)+"cert.pem", config.ServerDir+"key.pem", nil)
 }
 
 func LoginPage(wr http.ResponseWriter, rq *http.Request) {

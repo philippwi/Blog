@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"time"
 	"os"
+	"Blog/utility"
 )
 
 func SaveUser(name, password string){
@@ -19,7 +20,7 @@ func SaveUser(name, password string){
 	}
 	users = append(users, userData)
 
-	file, err := os.Create(config.DataDir + "users.json")
+	file, err := os.Create(utility.FixPath(config.DataDir) + "users.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(users)
@@ -42,7 +43,7 @@ func SaveBlogEntry(author, title, content string){
 
 	entries = append(entries, entryData)
 
-	file, err := os.Create(config.DataDir + "blogEntries.json")
+	file, err := os.Create(utility.FixPath(config.DataDir) + "blogEntries.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(entries)
@@ -65,7 +66,7 @@ func SaveComment(author, text string, blogID int){
 
 	comments = append(comments, commentData)
 
-	file, err := os.Create(config.DataDir + "comments.json")
+	file, err := os.Create(utility.FixPath(config.DataDir) + "comments.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(comments)
@@ -86,7 +87,7 @@ func ChangeUserPassword(name, password string){
 		}
 	}
 
-	file, err := os.Create(config.DataDir + "users.json")
+	file, err := os.Create(utility.FixPath(config.DataDir) + "users.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(users)
@@ -107,7 +108,7 @@ func ChangeBlogEntry(content string, id int){
 		}
 	}
 
-	file, err := os.Create(config.DataDir + "blogEntries.json")
+	file, err := os.Create(utility.FixPath(config.DataDir) + "blogEntries.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(blogs)
@@ -129,7 +130,7 @@ func DeleteBlogEntry(id int){
 		newBlogList = append(newBlogList, b)
 	}
 
-	file, err := os.Create(config.DataDir + "blogEntries.json")
+	file, err := os.Create(utility.FixPath(config.DataDir) + "blogEntries.json")
 	if err == nil{
 		enc := json.NewEncoder(file)
 		enc.Encode(newBlogList)

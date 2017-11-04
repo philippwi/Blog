@@ -1,13 +1,13 @@
 //Matrikelnummern: 3229403, 9964427
 
-package main
+package dataHandling
 
 import (
 	"Blog/config"
 	"encoding/json"
 	"os"
 	"testing"
-	"Blog/dataHandling"
+	"Blog/utility"
 )
 
 //Nutzer mit dem Namen "TestUser" und dem Passwort "12345" (nach decrypt) muss in users.json existieren!
@@ -18,15 +18,15 @@ func TestSaveUser(t *testing.T) {
 	usrName := "abcd123456789"
 	usrPw := "1234567"
 
-	dataHandling.SaveUser(usrName, usrPw)
+	SaveUser(usrName, usrPw)
 
-	if !dataHandling.UserExists(usrName) {
+	if !UserExists(usrName) {
 		t.Error("User " + usrName + " wurde nicht gefunden")
 	}
 
 	//erstellten user wieder löschen:
 
-	users := dataHandling.GetAllUsers()
+	users := GetAllUsers()
 
 	var newUserList []config.User
 
@@ -37,7 +37,7 @@ func TestSaveUser(t *testing.T) {
 		newUserList = append(newUserList, users[i])
 	}
 
-	file, err := os.Create(config.DataDir + "users.json")
+	file, err := os.Create(utility.FixPath(config.DataDir) + "users.json")
 	if err == nil {
 		enc := json.NewEncoder(file)
 		enc.Encode(newUserList)
@@ -53,9 +53,9 @@ func TestSaveBlogEntry(t *testing.T) {
 	blgTitle := "TestTitle"
 	blgContent := "TestText"
 
-	dataHandling.SaveBlogEntry(author, blgTitle, blgContent)
+	SaveBlogEntry(author, blgTitle, blgContent)
 
-	blgEntries := dataHandling.GetAllBlogEntries()
+	blgEntries := GetAllBlogEntries()
 
 	id := 0
 
@@ -73,7 +73,7 @@ func TestSaveBlogEntry(t *testing.T) {
 	}
 
 	if id != 0 {
-		dataHandling.DeleteBlogEntry(id)
+		DeleteBlogEntry(id)
 	}
 
 }
@@ -84,9 +84,9 @@ func TestSaveComment(t *testing.T) {
 	txt := "TestText"
 	blgID := 0
 
-	dataHandling.SaveComment(author, txt, blgID)
+	SaveComment(author, txt, blgID)
 
-	comments := dataHandling.GetAllComments()
+	comments := GetAllComments()
 
 	success := false
 
@@ -99,7 +99,7 @@ func TestSaveComment(t *testing.T) {
 
 	if success {
 		//Kommentar löschen:
-		comments = dataHandling.GetAllComments()
+		comments = GetAllComments()
 
 		var newComments []config.Comment
 
@@ -110,7 +110,7 @@ func TestSaveComment(t *testing.T) {
 			newComments = append(newComments, c)
 		}
 
-		file, err := os.Create(config.DataDir + "comments.json")
+		file, err := os.Create(utility.FixPath(config.DataDir) + "comments.json")
 		if err == nil {
 			enc := json.NewEncoder(file)
 			enc.Encode(newComments)
@@ -129,19 +129,19 @@ func TestChangeUserPassword(t *testing.T) {
 
 	var curPw string
 
-	dataHandling.ChangeUserPassword(TestUserName, newPw)
+	ChangeUserPassword(TestUserName, newPw)
 
-	users := dataHandling.GetAllUsers()
+	users := GetAllUsers()
 
 	success := false
 
 	for i, _ := range users {
 		if users[i].Name == TestUserName {
-			if dataHandling.DecryptPassword(users[i].PwSalt) == newPw {
+			if DecryptPassword(users[i].PwSalt) == newPw {
 				success = true
-				users[i].PwSalt = TestUserPwSalt //Passwort wieder zurücksetzen
+				ChangeUserPassword(TestUserName, TestUserPw) //Passwort wieder zurücksetzen
 			} else {
-				curPw = dataHandling.DecryptPassword(users[i].PwSalt)
+				curPw = DecryptPassword(users[i].PwSalt)
 			}
 			break
 		}
@@ -157,16 +157,16 @@ func TestChangeBlogEntry(t *testing.T) {
 	newTxt := "abcde"
 	var curTxt string
 
-	dataHandling.ChangeBlogEntry(newTxt, testBlogID)
+	ChangeBlogEntry(newTxt, testBlogID)
 
-	blogs := dataHandling.GetAllBlogEntries()
+	blogs := GetAllBlogEntries()
 
 	success := false
 
 	for i, _ := range blogs {
 		if blogs[i].ID == testBlogID {
 			curTxt = blogs[i].Content
-			dataHandling.ChangeBlogEntry(newTxt, testBlogID)
+			ChangeBlogEntry(newTxt, testBlogID)
 			if blogs[i].Content == newTxt {
 				success = true
 				blogs[i].Content = curTxt
@@ -189,9 +189,9 @@ func TestDeleteBlogEntry(t *testing.T) {
 
 	success := true
 
-	dataHandling.SaveBlogEntry(author, blgTitle, blgContent)
+	SaveBlogEntry(author, blgTitle, blgContent)
 
-	blgEntries := dataHandling.GetAllBlogEntries()
+	blgEntries := GetAllBlogEntries()
 
 	//ID finden
 	for i, _ := range blgEntries {
@@ -200,9 +200,9 @@ func TestDeleteBlogEntry(t *testing.T) {
 			break
 		}
 	}
-	dataHandling.DeleteBlogEntry(blgID)
+	DeleteBlogEntry(blgID)
 
-	blgEntries = dataHandling.GetAllBlogEntries()
+	blgEntries = GetAllBlogEntries()
 
 	for i, _ := range blgEntries {
 		if blgEntries[i].ID == blgID {
