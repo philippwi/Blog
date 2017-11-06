@@ -3,7 +3,6 @@
 package server
 
 import (
-	"fmt"
 	"Blog/config"
 	"net/http"
 	"html/template"
