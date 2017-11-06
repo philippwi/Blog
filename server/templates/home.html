@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    {{template "stylesheet"}}
 </head>
 <body>
 
@@ -20,6 +21,8 @@
     <textarea name="blgcont" cols="100" rows="5" minlength="20"></textarea>
     <input type="submit" value="Eintragen">
 </form>
+{{else}}
+<a href="login">Anmelden</a>
 {{end}}
 
 <ul>

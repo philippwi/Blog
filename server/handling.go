@@ -22,9 +22,11 @@ var sesExp time.Duration
 func StartServer(sessionExp int, port string) {
 	sesExp = time.Duration(sessionExp) * time.Minute
 	tpl = template.Must(template.ParseGlob(utility.FixPath(config.HtmlDir) + "*.html"))
-	http.HandleFunc("/", LoginPage)
+	fs := http.FileServer(http.Dir("server/templates/css"))
+	http.Handle("/css/", http.StripPrefix("/css/", fs))
+	http.HandleFunc("/", HomePage)
 	http.HandleFunc("/changepw", ChangePw)
-	http.HandleFunc("/home", HomePage)
+	http.HandleFunc("/login", LoginPage)
 	http.HandleFunc("/viewblog", ViewblogPage)
 	http.HandleFunc("/editblog", EdtBlg)
 	http.HandleFunc("/deleteblog", DltBlog)
@@ -42,18 +44,18 @@ func LoginPage(wr http.ResponseWriter, rq *http.Request) {
 			dataHandling.SaveUser(userName, password)
 			cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
 			http.SetCookie(wr, &cookie)
-			http.Redirect(wr, rq, "/home", http.StatusFound)
+			http.Redirect(wr, rq, "/", http.StatusFound)
 		} else { //Nutzer existiert bereits
 			if dataHandling.PasswordCorrect(userName, password) { //Passwort korrekt
 				cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
 				http.SetCookie(wr, &cookie)
-				http.Redirect(wr, rq, "/home", http.StatusFound)
+				http.Redirect(wr, rq, "/", http.StatusFound)
 			} else { //Passwort falsch
 				//http.Redirect(wr, rq, "/", http.st)
 			}
 		}
 	}
-	tpl.ExecuteTemplate(wr, "index.html", nil)
+	tpl.ExecuteTemplate(wr, "login.html", nil)
 }
 
 //Homepage zur Darstellung der Blogübersicht mit Möglichkeit der Blogerstellung
@@ -68,7 +70,9 @@ func HomePage(wr http.ResponseWriter, rq *http.Request) {
 
 	if rq.Method == http.MethodPost {
 		if !IsUserLoggedIn(rq) {
-			http.Redirect(wr, rq, "/", http.StatusFound)
+			tpl.ExecuteTemplate(wr, "message.html", config.Message{
+			MsgText:  "Sitzung abgelaufen",
+			Redirect: "logout"})
 			return
 		}
 		author := currentUser
@@ -146,7 +150,7 @@ func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 	if rq.Method == http.MethodPost {
 		if !IsUserLoggedIn(rq) {
 			tpl.ExecuteTemplate(wr, "message.html", config.Message{
-				MsgText:  "Session expired",
+				MsgText:  "Sitzung abgelaufen",
 				Redirect: "logout"})
 		} else {
 			newContent := rq.FormValue("blgcont")
@@ -163,7 +167,7 @@ func DltBlog(wr http.ResponseWriter, rq *http.Request) {
 
 	if !IsUserLoggedIn(rq) {
 		tpl.ExecuteTemplate(wr, "message.html", config.Message{
-			MsgText:  "Session expired",
+			MsgText:  "Sitzung abgelaufen",
 			Redirect: "logout"})
 		return
 	}
@@ -171,7 +175,7 @@ func DltBlog(wr http.ResponseWriter, rq *http.Request) {
 	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
 
 	dataHandling.DeleteBlogEntry(blogID)
-	http.Redirect(wr, rq, "/home", http.StatusFound)
+	http.Redirect(wr, rq, "/", http.StatusFound)
 }
 
 //Nutzerpasswort prüfen und ändern
@@ -180,7 +184,7 @@ func ChangePw(wr http.ResponseWriter, rq *http.Request) {
 
 	if !IsUserLoggedIn(rq) {
 		tpl.ExecuteTemplate(wr, "message.html", config.Message{
-			MsgText:  "Session expired",
+			MsgText:  "Sitzung abgelaufen",
 			Redirect: "logout"})
 		return
 	} else {
@@ -190,7 +194,7 @@ func ChangePw(wr http.ResponseWriter, rq *http.Request) {
 	if rq.Method == http.MethodPost {
 		if !IsUserLoggedIn(rq) {
 			tpl.ExecuteTemplate(wr, "message.html", config.Message{
-				MsgText:  "Session expired",
+				MsgText:  "Sitzung abgelaufen",
 				Redirect: "logout"})
 		} else {
 			oldPw := rq.FormValue("currpw")
