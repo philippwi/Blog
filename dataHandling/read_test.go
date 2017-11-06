@@ -14,7 +14,12 @@ import (
 //Testkommentar mit BlogID=0 und Autor=TestUser muss in comments.json existieren!
 
 func TestGetAllUsers(t *testing.T) {
-	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "users.json")
+	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "users.json")
+
+	if err != nil{
+		panic(err)
+	}
+
 	var actualUsers []config.User
 	json.Unmarshal(data, &actualUsers)
 
@@ -26,7 +31,12 @@ func TestGetAllUsers(t *testing.T) {
 }
 
 func TestGetAllBlogEntries(t *testing.T) {
-	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "blogEntries.json")
+	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "blogEntries.json")
+
+	if err != nil{
+		panic(err)
+	}
+
 	var actualBlogs []config.BlogEntry
 	json.Unmarshal(data, &actualBlogs)
 
@@ -40,7 +50,12 @@ func TestGetAllBlogEntries(t *testing.T) {
 }
 
 func TestGetAllComments(t *testing.T) {
-	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "comments.json")
+	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "comments.json")
+
+	if err != nil{
+		panic(err)
+	}
+
 	var actualComments []config.Comment
 	json.Unmarshal(data, &actualComments)
 

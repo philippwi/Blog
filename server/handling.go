@@ -98,7 +98,9 @@ func ViewblogPage(wr http.ResponseWriter, rq *http.Request) {
 		currentUser = GetCurrentUsername(rq)
 	}
 
-	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
+	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
+
+	if err != nil{}
 
 	blog, blogComments := dataHandling.GetBlogWithComments(blogID)
 

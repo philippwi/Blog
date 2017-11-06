@@ -26,7 +26,11 @@ func TestIsIntInArray(t *testing.T){
 func TestFixPath(t *testing.T) {
 	testPath := "test"
 	fixedPath := FixPath(testPath)
-	wd,_ := os.Getwd()
+	wd, err := os.Getwd()
+
+	if err != nil{
+		panic(err)
+	}
 
 	switch wd[len(wd)-4:]{
 	case "Blog":

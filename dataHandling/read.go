@@ -11,7 +11,12 @@ import (
 
 //liefert alle Nutzer aus entsprechender .json Datei
 func GetAllUsers() []config.User {
-	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "users.json")
+	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "users.json")
+
+	if err != nil{
+		panic(err)
+	}
+
 	var users []config.User
 	json.Unmarshal(data, &users)
 	return users
@@ -19,7 +24,12 @@ func GetAllUsers() []config.User {
 
 //liefert alle Blogeinträge aus entsprechender .json Datei
 func GetAllBlogEntries() []config.BlogEntry{
-	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "blogEntries.json")
+	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "blogEntries.json")
+
+	if err != nil{
+		panic(err)
+	}
+
 	var blogEntries []config.BlogEntry
 	json.Unmarshal(data, &blogEntries)
 	return SortBlogEntries(blogEntries)
@@ -27,7 +37,12 @@ func GetAllBlogEntries() []config.BlogEntry{
 
 //liefert alle Kommentare aus entsprechender .json Datei
 func GetAllComments() []config.Comment {
-	data, _ := ioutil.ReadFile(utility.FixPath(config.DataDir) + "comments.json")
+	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "comments.json")
+
+	if err != nil{
+		panic(err)
+	}
+
 	var comments []config.Comment
 	json.Unmarshal(data, &comments)
 	return SortComments(comments)
@@ -38,9 +53,9 @@ func GetBlog(blogID int) (blog config.BlogEntry) {
 
 	allBlogEntries := GetAllBlogEntries()
 
-	for _, b := range allBlogEntries {
-		if b.ID == blogID {
-			blog = b
+	for i, _ := range allBlogEntries {
+		if allBlogEntries[i].ID == blogID {
+			blog = allBlogEntries[i]
 			break
 		}
 	}
@@ -53,16 +68,16 @@ func GetBlogWithComments(blogID int) (blog config.BlogEntry, blogComments []conf
 	allBlogEntries := GetAllBlogEntries()
 	allComments := GetAllComments()
 
-	for _, b := range allBlogEntries {
-		if b.ID == blogID {
-			blog = b
+	for i, _ := range allBlogEntries {
+		if allBlogEntries[i].ID == blogID {
+			blog = allBlogEntries[i]
 			break
 		}
 	}
 
-	for _, c := range allComments {
-		if c.BlogID == blogID {
-			blogComments = append(blogComments, c)
+	for i, _ := range allComments {
+		if allComments[i].BlogID == blogID {
+			blogComments = append(blogComments, allComments[i])
 		}
 	}
 

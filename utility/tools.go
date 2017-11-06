@@ -17,7 +17,11 @@ func IsIntInArray(number int, list []int) bool{
 //korrigiert Pfade
 //benötigt für korrekten Testablauf
 func FixPath(path string) string{
-	wd,_ := os.Getwd()
+	wd, err := os.Getwd()
+
+	if err != nil{
+		panic(err)
+	}
 
 	if wd[len(wd)-4:] != "Blog"{
 		return "../"+path

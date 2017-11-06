@@ -14,8 +14,8 @@ import (
 func UserExists(name string) bool {
 	existingUsers := GetAllUsers()
 
-	for _, user := range existingUsers {
-		if user.Name == name {
+	for i,_ := range existingUsers {
+		if existingUsers[i].Name == name {
 			return true
 		}
 	}
@@ -26,8 +26,8 @@ func UserExists(name string) bool {
 func PasswordCorrect(name, password string) bool {
 	existingUsers := GetAllUsers()
 
-	for _, user := range existingUsers {
-		if name == user.Name && password == DecryptPassword(user.PwSalt) {
+	for i, _ := range existingUsers {
+		if name == existingUsers[i].Name && password == DecryptPassword(existingUsers[i].PwSalt) {
 			return true
 		}
 	}
@@ -66,13 +66,19 @@ func NewBlogID() int {
 func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
 
 	sort.Slice(entries, func(i, j int) bool {
-		date1, _ := time.Parse("02.01.2006 um 15:04:05", entries[i].Date)
-		date2, _ := time.Parse("02.01.2006 um 15:04:05", entries[j].Date)
+		date1, err1 := time.Parse("02.01.2006 um 15:04:05", entries[i].Date)
+		date2, err2 := time.Parse("02.01.2006 um 15:04:05", entries[j].Date)
 
-		date1int, _ := strconv.Atoi(date1.Format("20060102150405"))
-		date2int, _ := strconv.Atoi(date2.Format("20060102150405"))
+		date1int, err3 := strconv.Atoi(date1.Format("20060102150405"))
+		date2int, err4 := strconv.Atoi(date2.Format("20060102150405"))
+
+		if err1 != nil || err2 != nil ||
+			err3 != nil || err4 != nil {
+			panic("Date conversion error")
+		}
+
 		return date1int > date2int
-	})
+		})
 	return entries
 }
 
@@ -80,11 +86,17 @@ func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
 func SortComments(comments []config.Comment) []config.Comment {
 
 	sort.Slice(comments, func(i, j int) bool {
-		date1, _ := time.Parse("02.01.2006 um 15:04:05", comments[i].Date)
-		date2, _ := time.Parse("02.01.2006 um 15:04:05", comments[j].Date)
+		date1, err1 := time.Parse("02.01.2006 um 15:04:05", comments[i].Date)
+		date2, err2 := time.Parse("02.01.2006 um 15:04:05", comments[j].Date)
 
-		date1int, _ := strconv.Atoi(date1.Format("20060102150405"))
-		date2int, _ := strconv.Atoi(date2.Format("20060102150405"))
+		date1int, err3 := strconv.Atoi(date1.Format("20060102150405"))
+		date2int, err4 := strconv.Atoi(date2.Format("20060102150405"))
+
+		if err1 != nil || err2 != nil ||
+			err3 != nil || err4 != nil {
+			panic("Date conversion error")
+		}
+
 		return date1int > date2int
 	})
 	return comments

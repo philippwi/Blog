@@ -43,10 +43,6 @@ func TestDecryptPassword(t *testing.T) {
 	}
 }
 
-func TestNewUserID(t *testing.T) {
-
-}
-
 func TestNewBlogID(t *testing.T) {
 	newID := NewBlogID()
 

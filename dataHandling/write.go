@@ -129,11 +129,11 @@ func DeleteBlogEntry(id int){
 
 	var newBlogList []config.BlogEntry
 
-	for _,b := range blogs{
-		if b.ID == id{
+	for i, _ := range blogs{
+		if blogs[i].ID == id{
 			continue
 		}
-		newBlogList = append(newBlogList, b)
+		newBlogList = append(newBlogList, blogs[i])
 	}
 
 	file, err := os.Create(utility.FixPath(config.DataDir) + "blogEntries.json")

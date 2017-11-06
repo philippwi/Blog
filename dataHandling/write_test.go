@@ -103,11 +103,11 @@ func TestSaveComment(t *testing.T) {
 
 		var newComments []config.Comment
 
-		for _, c := range comments {
-			if c.BlogID == blgID && c.Text == txt {
+		for i, _ := range comments {
+			if comments[i].BlogID == blgID && comments[i].Text == txt {
 				continue
 			}
-			newComments = append(newComments, c)
+			newComments = append(newComments, comments[i])
 		}
 
 		file, err := os.Create(utility.FixPath(config.DataDir) + "comments.json")
