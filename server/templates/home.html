@@ -6,6 +6,23 @@
     <meta charset="UTF-8">
     <title>Home</title>
     {{template "stylesheet"}}
+
+    <script>
+        function showAndHide() {
+            document.getElementById("nwblg").style.display = "block";
+            document.getElementById("btn-show").style.display = "none";
+        }
+
+        function previewContent(text, element) {
+            if (text.length <= 750) {
+                document.getElementById(element).innerHTML = text;
+            }
+            else {
+                document.getElementById(element).innerHTML = text.substring(0, 750) + "[...]";
+            }
+        }
+    </script>
+
 </head>
 <body>
 
@@ -27,22 +44,19 @@
 
 <ul>
     {{range .BlogEntries}}
-        {{if ne .ID 0}}
-        <li><a href="viewblog?ID={{.ID}}">{{.Title}}</a><br>
-            erstellt {{.Date}}<br>
-            von {{.Author}}<br>
-            <br>
-        </li>
-        {{end}}
+    {{if ne .ID 0}}
+    <li><a href="viewblog?ID={{.ID}}">{{.Title}}</a><br>
+        erstellt {{.Date}}<br>
+        von {{.Author}}<br>
+        <p id="cont{{.ID}}" class="blgprv"></p>
+        <br>
+    </li>
+    <script>
+        previewContent("{{.Content}}","cont{{.ID}}");
+    </script>
+    {{end}}
     {{end}}
 </ul>
-
-<script>
-    function showAndHide() {
-        document.getElementById("nwblg").style.display = "block";
-        document.getElementById("btn-show").style.display = "none"
-    }
-</script>
 
 </body>
 </html>

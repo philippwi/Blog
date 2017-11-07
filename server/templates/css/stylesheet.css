@@ -1,8 +1,27 @@
 body {
     background-color: #90ff90;
     font-family: Arial;
-    font-size: 16px;
-    font-size: 1.2vw;
+    font-size: 17px;
+}
+
+.bnr {
+    width: 100%;
+    font-family: "Arial";
+    font-weight: bolder;
+    font-size: 50px;
+    text-align: center;
+    animation-name: pulse;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+    0% {
+        color: black;
+    }
+    50% {
+        color: #ffffff;
+    }
 }
 
 a {
@@ -32,10 +51,14 @@ a.btn-right {
 }
 
 .blgtxt {
-    font-size: 15px;
-    font-size: 1.1vw;
+    font-size: 16px;
     font-family: "Times New Roman";
     background-color: white;
+}
+
+.blgprv {
+    font-style: italic;
+    width: 60%;
 }
 
 .lgn {
