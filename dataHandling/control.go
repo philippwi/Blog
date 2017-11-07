@@ -8,6 +8,8 @@ import (
 	"sort"
 	"time"
 	"strconv"
+	"crypto/sha1"
+	"fmt"
 )
 
 //testet ob übergebener Nutzername existiert
@@ -27,21 +29,28 @@ func PasswordCorrect(name, password string) bool {
 	existingUsers := GetAllUsers()
 
 	for i, _ := range existingUsers {
-		if name == existingUsers[i].Name && password == DecryptPassword(existingUsers[i].PwSalt) {
-			return true
+		if name == existingUsers[i].Name{
+			if EncryptPassword(password, name) == existingUsers[i].PwSalt {
+				return true
+			}
+			break
 		}
 	}
 	return false
 }
 
 //verchlüsselt Passwort
-func EncryptPassword(pw string) string {
-	return pw
-}
+func EncryptPassword(pw string, userName string) string {
 
-//entschlüsselt Passwort
-func DecryptPassword(code string) string {
-	return code
+	saltedPw := pw + userName
+
+	h := sha1.New()
+
+	h.Write([]byte(saltedPw))
+
+	encryptedPw := h.Sum(nil)
+
+	return fmt.Sprintf("%x", encryptedPw)
 }
 
 //generiert freie ID für einen Blogeintrag

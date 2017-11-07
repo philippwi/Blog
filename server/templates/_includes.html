@@ -1,9 +1,19 @@
+<!-- Matrikelnummern: 3229403, 9964427 -->
+
 {{define "stylesheet"}}
 <link rel="stylesheet" href="css/stylesheet.css">
 {{end}}
 
-{{define "scripts"}}
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+{{define "topbar"}}
+<div id="topbar" class="tpbr">
+    {{if ne .CurrentUser ""}}
+    <p>Aktueller Nutzer: {{.CurrentUser}}</p>
+    <a href="changepw" class="btn">Passwort ändern</a>
+    <a href="logout" class="btn">Ausloggen</a>
+    {{else}}
+    <a href="login" class="btn">Anmelden</a>
+    {{end}}
+    <a href=javascript:history.back() class="btn-right">Zurück</a>
+</div>
+<br>
 {{end}}

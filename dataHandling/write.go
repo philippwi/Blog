@@ -16,7 +16,7 @@ func SaveUser(name, password string){
 
 	userData := config.User{
 		Name:   name,
-		PwSalt: EncryptPassword(password),
+		PwSalt: EncryptPassword(password, name),
 		//ID:     NewUserID(),
 	}
 	users = append(users, userData)
@@ -86,7 +86,7 @@ func ChangeUserPassword(name, password string){
 
 	for i,u := range users{
 		if u.Name == name{
-			users[i].PwSalt = EncryptPassword(password)
+			users[i].PwSalt = EncryptPassword(password, name)
 			break
 		}
 	}

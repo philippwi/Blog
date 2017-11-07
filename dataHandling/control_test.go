@@ -34,15 +34,6 @@ func TestEncryptPassword(t *testing.T) {
 
 }
 
-func TestDecryptPassword(t *testing.T) {
-	pw := "abcd12345"
-	encPw := EncryptPassword(pw)
-
-	if DecryptPassword(encPw) != pw {
-		t.Error("Entschlüsselung fehlgeschlagen")
-	}
-}
-
 func TestNewBlogID(t *testing.T) {
 	newID := NewBlogID()
 

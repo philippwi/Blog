@@ -127,8 +127,6 @@ func TestChangeUserPassword(t *testing.T) {
 
 	newPw := "abcde"
 
-	var curPw string
-
 	ChangeUserPassword(TestUserName, newPw)
 
 	users := GetAllUsers()
@@ -137,18 +135,16 @@ func TestChangeUserPassword(t *testing.T) {
 
 	for i, _ := range users {
 		if users[i].Name == TestUserName {
-			if DecryptPassword(users[i].PwSalt) == newPw {
+			if users[i].PwSalt == EncryptPassword(newPw, TestUserName) {
 				success = true
 				ChangeUserPassword(TestUserName, TestUserPw) //Passwort wieder zurücksetzen
-			} else {
-				curPw = DecryptPassword(users[i].PwSalt)
 			}
 			break
 		}
 	}
 
 	if !success {
-		t.Error("Passwort soll " + newPw + " sein, aber ist: " + curPw)
+		t.Error("Passwort wurde nicht korrekt geändert")
 	}
 }
 

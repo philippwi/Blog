@@ -1,3 +1,45 @@
 body {
-    background-color: lightblue;
+    background-color: #90ff90;
+    font-family: Arial;
+    font-size: 16px;
+    font-size: 1.2vw;
+}
+
+a {
+    color: darkblue;
+}
+
+a.btn {
+    color: black;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    text-decoration: none;
+}
+
+a.btn-right {
+    color: black;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    text-decoration: none;
+    float: right;
+}
+
+.tpbr {
+    color: white;
+    background-color: black;
+}
+
+.blgtxt {
+    font-size: 15px;
+    font-size: 1.1vw;
+    font-family: "Times New Roman";
+    background-color: white;
+}
+
+.lgn {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
 }
