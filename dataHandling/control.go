@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"crypto/sha1"
 	"fmt"
+	"errors"
 )
 
 //testet ob übergebener Nutzername existiert
@@ -83,7 +84,7 @@ func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
 
 		if err1 != nil || err2 != nil ||
 			err3 != nil || err4 != nil {
-			panic("Date conversion error")
+			utility.HandleError(errors.New("Date conversion error"))
 		}
 
 		return date1int > date2int
@@ -103,7 +104,7 @@ func SortComments(comments []config.Comment) []config.Comment {
 
 		if err1 != nil || err2 != nil ||
 			err3 != nil || err4 != nil {
-			panic("Date conversion error")
+			utility.HandleError(errors.New("Date conversion error"))
 		}
 
 		return date1int > date2int

@@ -26,7 +26,7 @@ func SaveUser(name, password string){
 		enc := json.NewEncoder(file)
 		enc.Encode(users)
 	} else{
-		panic(err)
+		utility.HandleError(err)
 	}
 	file.Close()
 }
@@ -50,7 +50,7 @@ func SaveBlogEntry(author, title, content string){
 		enc := json.NewEncoder(file)
 		enc.Encode(entries)
 	} else{
-		panic(err)
+		utility.HandleError(err)
 	}
 	file.Close()
 }
@@ -74,7 +74,7 @@ func SaveComment(author, text string, blogID int){
 		enc := json.NewEncoder(file)
 		enc.Encode(comments)
 	} else{
-		panic(err)
+		utility.HandleError(err)
 	}
 	file.Close()
 }
@@ -96,7 +96,7 @@ func ChangeUserPassword(name, password string){
 		enc := json.NewEncoder(file)
 		enc.Encode(users)
 	} else{
-		panic(err)
+		utility.HandleError(err)
 	}
 	file.Close()
 }
@@ -118,7 +118,7 @@ func ChangeBlogEntry(content string, id int){
 		enc := json.NewEncoder(file)
 		enc.Encode(blogs)
 	} else{
-		panic(err)
+		utility.HandleError(err)
 	}
 	file.Close()
 }
@@ -141,7 +141,7 @@ func DeleteBlogEntry(id int){
 		enc := json.NewEncoder(file)
 		enc.Encode(newBlogList)
 	} else{
-		panic(err)
+		utility.HandleError(err)
 	}
 	file.Close()
 }

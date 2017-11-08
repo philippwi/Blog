@@ -2,7 +2,10 @@
 
 package utility
 
-import "os"
+import (
+	"os"
+	"log"
+)
 
 //testet ob eine Zahl in einer Zahlenreihe vorhanden ist
 func IsIntInArray(number int, list []int) bool{
@@ -20,7 +23,7 @@ func FixPath(path string) string{
 	wd, err := os.Getwd()
 
 	if err != nil{
-		panic(err)
+		HandleError(err)
 	}
 
 	if wd[len(wd)-4:] != "Blog"{
@@ -28,4 +31,8 @@ func FixPath(path string) string{
 	}else{
 		return path
 	}
+}
+
+func HandleError(e error){
+	log.Println("FEHLER: " + e.Error())
 }

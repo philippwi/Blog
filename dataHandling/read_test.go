@@ -17,7 +17,7 @@ func TestGetAllUsers(t *testing.T) {
 	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "users.json")
 
 	if err != nil{
-		panic(err)
+		utility.HandleError(err)
 	}
 
 	var actualUsers []config.User
@@ -34,7 +34,7 @@ func TestGetAllBlogEntries(t *testing.T) {
 	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "blogEntries.json")
 
 	if err != nil{
-		panic(err)
+		utility.HandleError(err)
 	}
 
 	var actualBlogs []config.BlogEntry
@@ -53,7 +53,7 @@ func TestGetAllComments(t *testing.T) {
 	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "comments.json")
 
 	if err != nil{
-		panic(err)
+		utility.HandleError(err)
 	}
 
 	var actualComments []config.Comment

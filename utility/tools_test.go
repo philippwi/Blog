@@ -5,21 +5,27 @@ package utility
 import (
 	"testing"
 	"os"
+	"bytes"
+	"log"
+	"errors"
 )
 
-func TestIsIntInArray(t *testing.T){
+func TestIsIntInArray(t *testing.T) {
 
-	array1 := []int{1,2,3,4,5}
-	array2 := []int{43,67,149,3,25,114,3217,12}
+	array1 := []int{1, 2, 3, 4, 5}
+	array2 := []int{43, 67, 149, 3, 25, 114, 3217, 12}
+	array3 := []int{48, 1, 27, 100, 2}
 
 	success := true
 
-	if !IsIntInArray(4, array1) ||	!IsIntInArray(25, array2){
+	if !IsIntInArray(4, array1) ||
+		!IsIntInArray(25, array2) ||
+		IsIntInArray(55, array3) {
 		success = false
 	}
 
 	if !success {
-		t.Error("Expected: true, got: false")
+		t.Error("Fehler: Zahl wurde nicht oder fälschlicherweise im Array gefunden")
 	}
 }
 
@@ -28,19 +34,45 @@ func TestFixPath(t *testing.T) {
 	fixedPath := FixPath(testPath)
 	wd, err := os.Getwd()
 
-	if err != nil{
-		panic(err)
+	if err != nil {
+		HandleError(err)
 	}
 
-	switch wd[len(wd)-4:]{
+	switch wd[len(wd)-4:] {
 	case "Blog":
-		if fixedPath != testPath{
-			t.Error("Pfad fehlerhaft - wd: " +wd+ " - fixedPath: " + fixedPath)
+		if fixedPath != testPath {
+			t.Error("Pfad fehlerhaft - wd: " + wd + " - fixedPath: " + fixedPath)
 		}
 	default:
-		if fixedPath != "../"+testPath{
-			t.Error("Pfad fehlerhaft - wd: " +wd+ " - fixedPath: " + fixedPath)
+		if fixedPath != "../"+testPath {
+			t.Error("Pfad fehlerhaft - wd: " + wd + " - fixedPath: " + fixedPath)
 		}
 
 	}
+}
+
+func TestHandleError(t *testing.T) {
+	errorMsg1 := "Ein Test-Fehler 1"
+	errorMsg2 := "some random error: 1234567890"
+
+	var buf bytes.Buffer
+
+	log.SetOutput(&buf)
+	defer func() {
+		log.SetOutput(os.Stderr)
+	}()
+	HandleError(errors.New(errorMsg1))
+	out1:= buf.String()
+
+	if  out1[len(out1)-len(errorMsg1)-1:] != errorMsg1 +"\n"{
+		t.Error("Falsche Fehlerausgabe (1)")
+	}
+
+	HandleError(errors.New(errorMsg2))
+	out2:= buf.String()
+
+	if  out2[len(out2)-len(errorMsg2)-1:] != errorMsg2 +"\n"{
+		t.Error("Falsche Fehlerausgabe (2)")
+	}
+
 }
