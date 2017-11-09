@@ -36,6 +36,7 @@ func StartServer(sessionExp int, port string) {
 
 //Anmeldeseite mit Login-Eingabe-Verarbeitung
 func LoginPage(wr http.ResponseWriter, rq *http.Request) {
+
 	if rq.Method == http.MethodPost {
 		userName := rq.FormValue("usrnm")
 		password := rq.FormValue("passw")
@@ -249,7 +250,8 @@ func IsUserLoggedIn(rq *http.Request) bool {
 func GetCurrentUsername(rq *http.Request) string {
 	cookie, err := rq.Cookie("user")
 	if err != nil {
-		return "error"
+		utility.HandleError(err)
+		return ""
 	}
 	return cookie.Value
 }
