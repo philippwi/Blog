@@ -45,14 +45,18 @@ func LoginPage(wr http.ResponseWriter, rq *http.Request) {
 			dataHandling.SaveUser(userName, password)
 			cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
 			http.SetCookie(wr, &cookie)
-			http.Redirect(wr, rq, "/", http.StatusFound)
+			tpl.ExecuteTemplate(wr, "message.html", config.Message{
+				MsgText:  "Nutzer erstellt",
+				Redirect: "home"})
 		} else { //Nutzer existiert bereits
 			if dataHandling.PasswordCorrect(userName, password) { //Passwort korrekt
 				cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
 				http.SetCookie(wr, &cookie)
 				http.Redirect(wr, rq, "/", http.StatusFound)
 			} else { //Passwort falsch
-				//http.Redirect(wr, rq, "/", http.st)
+				tpl.ExecuteTemplate(wr, "message.html", config.Message{
+					MsgText:  "Passwort falsch",
+					Redirect: "login"})
 			}
 		}
 	}
@@ -105,7 +109,9 @@ func ViewblogPage(wr http.ResponseWriter, rq *http.Request) {
 
 	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
 
-	if err != nil{}
+	if err != nil{
+		utility.HandleError(err)
+	}
 
 	blog, blogComments := dataHandling.GetBlogWithComments(blogID)
 
@@ -139,7 +145,11 @@ func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 		currentUser = GetCurrentUsername(rq)
 	}
 
-	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
+	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
+
+	if err != nil{
+		utility.HandleError(err)
+	}
 
 	blogContent := dataHandling.GetBlog(blogID).Content
 
@@ -156,7 +166,9 @@ func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 		} else {
 			newContent := rq.FormValue("blgcont")
 			dataHandling.ChangeBlogEntry(newContent, blogID)
-			http.Redirect(wr, rq, "/viewblog?ID="+strconv.Itoa(blogID), http.StatusFound)
+			tpl.ExecuteTemplate(wr, "message.html", config.Message{
+				MsgText:  "Blogänderung gespeichert",
+				Redirect: "/viewblog?ID="+strconv.Itoa(blogID)})
 		}
 	}
 
@@ -173,10 +185,16 @@ func DltBlog(wr http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	blogID, _ := strconv.Atoi(rq.URL.Query()["ID"][0])
+	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
+
+	if err != nil{
+		utility.HandleError(err)
+	}
 
 	dataHandling.DeleteBlogEntry(blogID)
-	http.Redirect(wr, rq, "/", http.StatusFound)
+	tpl.ExecuteTemplate(wr, "message.html", config.Message{
+		MsgText:  "Eintrag gelöscht",
+		Redirect: "home"})
 }
 
 //Nutzerpasswort prüfen und ändern
