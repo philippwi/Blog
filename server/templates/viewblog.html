@@ -19,10 +19,12 @@
 {{template "topbar" . }}
 
 {{if ne .CurrentUser ""}}
+{{if eq .CurrentUser .Blog.Author}}
 <br>
 <a href="deleteblog?ID={{.Blog.ID}}" class="btn">Eintrag löschen</a>
 <a href="editblog?ID={{.Blog.ID}}" class="btn">Eintrag bearbeiten</a><br>
 <hr>
+{{end}}
 {{end}}
 
 <h1>{{.Blog.Title}}</h1>

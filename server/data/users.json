@@ -1,1 +1,6 @@
-[{"Name":"TestUser","PwSalt":"abcf1af809c1156389ae42ac589d1fedaebdc689"}]
+[
+  {
+    "Name": "TestUser",
+    "PwSalt": "abcf1af809c1156389ae42ac589d1fedaebdc689"
+  }
+]
