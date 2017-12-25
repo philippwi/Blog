@@ -35,6 +35,8 @@ func FixPath(path string) string{
 
 func EncryptCookie(txt string) string{
 
+	if txt == "" {return ""}
+
 	btSlc := []byte(txt)
 
 	for i,_ := range btSlc{
@@ -45,6 +47,9 @@ func EncryptCookie(txt string) string{
 }
 
 func DecryptCookie(txt string) string{
+
+
+	if txt == "" {return ""}
 
 	btSlc := []byte(txt)
 

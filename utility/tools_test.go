@@ -58,6 +58,11 @@ func TestEncryptCookie(t *testing.T){
 	if EncryptCookie(testString) != testStringEnc{
 		t.Error("Verschlüsselung fehlerhaft")
 	}
+
+	//Testfall leerer String
+	if EncryptCookie("") != ""{
+		t.Error("Verschlüsselung fehlerhaft")
+	}
 }
 
 func TestDecryptCookie(t *testing.T){
@@ -65,6 +70,11 @@ func TestDecryptCookie(t *testing.T){
 	testStringEnc := "Uftu23456<;"
 
 	if DecryptCookie(testStringEnc) != testString{
+		t.Error("Entschlüsselung fehlerhaft")
+	}
+
+	//Testfall leerer String
+	if DecryptCookie("") != ""{
 		t.Error("Entschlüsselung fehlerhaft")
 	}
 }
