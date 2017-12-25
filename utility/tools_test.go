@@ -51,6 +51,24 @@ func TestFixPath(t *testing.T) {
 	}
 }
 
+func TestEncryptCookie(t *testing.T){
+	testString := "Test12345;:"
+	testStringEnc := "Uftu23456<;"
+
+	if EncryptCookie(testString) != testStringEnc{
+		t.Error("Verschlüsselung fehlerhaft")
+	}
+}
+
+func TestDecryptCookie(t *testing.T){
+	testString := "Test12345;:"
+	testStringEnc := "Uftu23456<;"
+
+	if DecryptCookie(testStringEnc) != testString{
+		t.Error("Entschlüsselung fehlerhaft")
+	}
+}
+
 func TestHandleError(t *testing.T) {
 	errorMsg1 := "Ein Test-Fehler 1"
 	errorMsg2 := "some random error: 1234567890"
@@ -76,3 +94,4 @@ func TestHandleError(t *testing.T) {
 	}
 
 }
+

@@ -33,6 +33,27 @@ func FixPath(path string) string{
 	}
 }
 
+func EncryptCookie(txt string) string{
+
+	btSlc := []byte(txt)
+
+	for i,_ := range btSlc{
+		btSlc[i] += 1
+	}
+
+	return string(btSlc)
+}
+
+func DecryptCookie(txt string) string{
+
+	btSlc := []byte(txt)
+
+	for i,_ := range btSlc{
+		btSlc[i] -= 1
+	}
+	return string(btSlc)
+}
+
 func HandleError(e error){
 	log.Println("FEHLER: " + e.Error())
 }

@@ -43,14 +43,14 @@ func LoginPage(wr http.ResponseWriter, rq *http.Request) {
 
 		if !dataHandling.UserExists(userName) { //Nutzer existiert nicht
 			dataHandling.SaveUser(userName, password)
-			cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
+			cookie := http.Cookie{Name: "user", Value: utility.EncryptCookie(userName), Expires: time.Now().Add(sesExp)}
 			http.SetCookie(wr, &cookie)
 			tpl.ExecuteTemplate(wr, "message.html", config.Message{
 				MsgText:  "Nutzer erstellt",
 				Redirect: "home"})
 		} else { //Nutzer existiert bereits
 			if dataHandling.PasswordCorrect(userName, password) { //Passwort korrekt
-				cookie := http.Cookie{Name: "user", Value: userName, Expires: time.Now().Add(sesExp)}
+				cookie := http.Cookie{Name: "user", Value: utility.EncryptCookie(userName), Expires: time.Now().Add(sesExp)}
 				http.SetCookie(wr, &cookie)
 				http.Redirect(wr, rq, "/", http.StatusFound)
 			} else { //Passwort falsch
@@ -243,7 +243,7 @@ func ChangePw(wr http.ResponseWriter, rq *http.Request) {
 
 //Sitzung eines angemeldeten Nutzers beenden
 func Logout(wr http.ResponseWriter, rq *http.Request) {
-	cookie := http.Cookie{Name: "user", Value: "", Expires: time.Now()}
+	cookie := http.Cookie{Name: "user", Value: utility.EncryptCookie(""), Expires: time.Now()}
 	http.SetCookie(wr, &cookie)
 
 	http.Redirect(wr, rq, "/", http.StatusFound)
@@ -257,7 +257,7 @@ func IsUserLoggedIn(rq *http.Request) bool {
 		return false
 	}
 
-	if !dataHandling.UserExists(cookie.Value) {
+	if !dataHandling.UserExists(utility.DecryptCookie(cookie.Value)) {
 		return false
 	}
 
@@ -271,5 +271,5 @@ func GetCurrentUsername(rq *http.Request) string {
 		utility.HandleError(err)
 		return ""
 	}
-	return cookie.Value
+	return utility.DecryptCookie(cookie.Value)
 }
