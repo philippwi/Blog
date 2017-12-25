@@ -47,7 +47,7 @@ von {{.Blog.Author}}<br>
     <label>Kommentieren:</label><br><br>
     {{if eq .CurrentUser ""}}
     <label for="nck">Nickname</label>
-    <input type="text" name="nicknm" id="nck" minlength="1" maxlength="10"><br>
+    <input type="text" name="nicknm" id="nck" value="{{.NickName}}" minlength="1" maxlength="10"><br>
     {{end}}
     <textarea name="cmnt" cols="70" rows="5" minlength="5"></textarea>
     <input type="submit" value="Abschicken">

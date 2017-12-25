@@ -33,6 +33,7 @@ type HomeData struct {
 
 type ViewblogData struct {
 	CurrentUser  string
+	NickName	 string
 	Blog         BlogEntry
 	BlogComments []Comment
 }

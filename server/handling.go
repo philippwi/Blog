@@ -76,8 +76,8 @@ func HomePage(wr http.ResponseWriter, rq *http.Request) {
 	if rq.Method == http.MethodPost {
 		if !IsUserLoggedIn(rq) {
 			tpl.ExecuteTemplate(wr, "message.html", config.Message{
-			MsgText:  "Sitzung abgelaufen",
-			Redirect: "logout"})
+				MsgText:  "Sitzung abgelaufen",
+				Redirect: "logout"})
 			return
 		}
 		author := currentUser
@@ -109,21 +109,27 @@ func ViewblogPage(wr http.ResponseWriter, rq *http.Request) {
 
 	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
 
-	if err != nil{
+	if err != nil {
 		utility.HandleError(err)
 	}
 
 	blog, blogComments := dataHandling.GetBlogWithComments(blogID)
+	nick := GetCurrentNick(rq)
 
 	pageData := config.ViewblogData{
 		CurrentUser:  currentUser,
+		NickName:     nick,
 		Blog:         blog,
 		BlogComments: blogComments}
 
 	if rq.Method == http.MethodPost {
 		var author string
 		if currentUser == "" {
-			author = rq.FormValue("nicknm") + " (Leser)"
+			nick = rq.FormValue("nicknm")
+			cookie := http.Cookie{Name: "nick", Value: utility.EncryptCookie(nick), Expires: time.Now().Add(sesExp)}
+			http.SetCookie(wr, &cookie)
+
+			author = nick + " (Leser)"
 		} else {
 			author = currentUser
 		}
@@ -147,7 +153,7 @@ func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 
 	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
 
-	if err != nil{
+	if err != nil {
 		utility.HandleError(err)
 	}
 
@@ -168,7 +174,7 @@ func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 			dataHandling.ChangeBlogEntry(newContent, blogID)
 			tpl.ExecuteTemplate(wr, "message.html", config.Message{
 				MsgText:  "Blogänderung gespeichert",
-				Redirect: "/viewblog?ID="+strconv.Itoa(blogID)})
+				Redirect: "/viewblog?ID=" + strconv.Itoa(blogID)})
 		}
 	}
 
@@ -187,7 +193,7 @@ func DltBlog(wr http.ResponseWriter, rq *http.Request) {
 
 	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
 
-	if err != nil{
+	if err != nil {
 		utility.HandleError(err)
 	}
 
@@ -267,6 +273,16 @@ func IsUserLoggedIn(rq *http.Request) bool {
 //liefert Name des aktuell angemelden Nutzers
 func GetCurrentUsername(rq *http.Request) string {
 	cookie, err := rq.Cookie("user")
+	if err != nil {
+		utility.HandleError(err)
+		return ""
+	}
+	return utility.DecryptCookie(cookie.Value)
+}
+
+//liefert Nickname
+func GetCurrentNick(rq *http.Request) string {
+	cookie, err := rq.Cookie("nick")
 	if err != nil {
 		utility.HandleError(err)
 		return ""
