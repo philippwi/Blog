@@ -14,7 +14,7 @@ func GetAllUsers() []config.User {
 	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "users.json")
 
 	if err != nil{
-		utility.HandleError(err)
+		utility.HandleError("read.GetAllUsers -> users auslesen", err)
 	}
 
 	var users []config.User
@@ -27,7 +27,7 @@ func GetAllBlogEntries() []config.BlogEntry{
 	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "blogEntries.json")
 
 	if err != nil{
-		utility.HandleError(err)
+		utility.HandleError("read.GetAllBlogEntries -> Blogs auslesen", err)
 	}
 
 	var blogEntries []config.BlogEntry
@@ -40,7 +40,7 @@ func GetAllComments() []config.Comment {
 	data, err := ioutil.ReadFile(utility.FixPath(config.DataDir) + "comments.json")
 
 	if err != nil{
-		utility.HandleError(err)
+		utility.HandleError("read.GetAllComments -> Kommentare auslesen", err)
 	}
 
 	var comments []config.Comment

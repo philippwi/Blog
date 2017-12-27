@@ -110,11 +110,12 @@ func ViewblogPage(wr http.ResponseWriter, rq *http.Request) {
 	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
 
 	if err != nil {
-		utility.HandleError(err)
+		utility.HandleError("handling.ViewblogPage -> BlogID zu int", err)
 	}
 
 	blog, blogComments := dataHandling.GetBlogWithComments(blogID)
 	nick := GetCurrentNick(rq)
+
 
 	pageData := config.ViewblogData{
 		CurrentUser:  currentUser,
@@ -154,7 +155,7 @@ func EdtBlg(wr http.ResponseWriter, rq *http.Request) {
 	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
 
 	if err != nil {
-		utility.HandleError(err)
+		utility.HandleError("handling.EdtBlg -> BlogID zu int", err)
 	}
 
 	blogContent := dataHandling.GetBlog(blogID).Content
@@ -194,7 +195,7 @@ func DltBlog(wr http.ResponseWriter, rq *http.Request) {
 	blogID, err := strconv.Atoi(rq.URL.Query()["ID"][0])
 
 	if err != nil {
-		utility.HandleError(err)
+		utility.HandleError("handling.DltBlog -> BlogID zu int", err)
 	}
 
 	dataHandling.DeleteBlogEntry(blogID)
@@ -274,7 +275,6 @@ func IsUserLoggedIn(rq *http.Request) bool {
 func GetCurrentUsername(rq *http.Request) string {
 	cookie, err := rq.Cookie("user")
 	if err != nil {
-		utility.HandleError(err)
 		return ""
 	}
 	return utility.DecryptCookie(cookie.Value)
@@ -284,7 +284,6 @@ func GetCurrentUsername(rq *http.Request) string {
 func GetCurrentNick(rq *http.Request) string {
 	cookie, err := rq.Cookie("nick")
 	if err != nil {
-		utility.HandleError(err)
 		return ""
 	}
 	return utility.DecryptCookie(cookie.Value)

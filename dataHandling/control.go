@@ -84,7 +84,7 @@ func SortBlogEntries(entries []config.BlogEntry) []config.BlogEntry {
 
 		if err1 != nil || err2 != nil ||
 			err3 != nil || err4 != nil {
-			utility.HandleError(errors.New("Date conversion error"))
+			utility.HandleError("control.SortBlogEntries -> Datumskonvertierung", errors.New("Date conversion error"))
 		}
 
 		return date1int > date2int
@@ -104,7 +104,7 @@ func SortComments(comments []config.Comment) []config.Comment {
 
 		if err1 != nil || err2 != nil ||
 			err3 != nil || err4 != nil {
-			utility.HandleError(errors.New("Date conversion error"))
+			utility.HandleError("control.SortComments -> Datumskonvertierung", errors.New("Date conversion error"))
 		}
 
 		return date1int > date2int

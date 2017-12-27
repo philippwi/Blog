@@ -35,7 +35,7 @@ func TestFixPath(t *testing.T) {
 	wd, err := os.Getwd()
 
 	if err != nil {
-		HandleError(err)
+		t.Error("Fehler beim Lesen des Working-Directory")
 	}
 
 	switch wd[len(wd)-4:] {
@@ -82,6 +82,8 @@ func TestDecryptCookie(t *testing.T){
 func TestHandleError(t *testing.T) {
 	errorMsg1 := "Ein Test-Fehler 1"
 	errorMsg2 := "some random error: 1234567890"
+	context1 := "Irgenein Kontext"
+	context2 := "zufall.dies.das 1234567890"
 
 	var buf bytes.Buffer
 
@@ -89,17 +91,19 @@ func TestHandleError(t *testing.T) {
 	defer func() {
 		log.SetOutput(os.Stderr)
 	}()
-	HandleError(errors.New(errorMsg1))
+	HandleError(context1, errors.New(errorMsg1))
 	out1:= buf.String()
 
-	if  out1[len(out1)-len(errorMsg1)-1:] != errorMsg1 +"\n"{
+	if  out1[len(out1)-len(errorMsg1 + "\nKontext: " + context1)-1:] !=
+		errorMsg1 + "\nKontext: " + context1+ "\n"{
 		t.Error("Falsche Fehlerausgabe (1)")
 	}
 
-	HandleError(errors.New(errorMsg2))
+	HandleError(context2, errors.New(errorMsg2))
 	out2:= buf.String()
 
-	if  out2[len(out2)-len(errorMsg2)-1:] != errorMsg2 +"\n"{
+	if  out2[len(out2)-len(errorMsg2 + "\nKontext: " + context2)-1:] !=
+		errorMsg2 + "\nKontext: " + context2+ "\n"{
 		t.Error("Falsche Fehlerausgabe (2)")
 	}
 
