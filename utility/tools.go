@@ -33,6 +33,7 @@ func FixPath(path string) string {
 	}
 }
 
+//Macht Cookie unleserlich
 func EncryptCookie(txt string) string {
 
 	if txt == "" {
@@ -48,6 +49,7 @@ func EncryptCookie(txt string) string {
 	return string(btSlc)
 }
 
+//Stellt Lesbarkeit wieder her
 func DecryptCookie(txt string) string {
 
 	if txt == "" {
@@ -62,6 +64,7 @@ func DecryptCookie(txt string) string {
 	return string(btSlc)
 }
 
+//Gibt Fehler und dessen Kontext aus
 func HandleError(context string, e error) {
 	log.Println("\nFEHLER: " + e.Error() + "\nKontext: " + context)
 }

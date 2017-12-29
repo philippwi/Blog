@@ -25,7 +25,7 @@ func UserExists(name string) bool {
 	return false
 }
 
-//testet ob Nutzer-Passwort komination korrekt ist
+//testet ob Nutzer-Passwort Kombination korrekt ist
 func PasswordCorrect(name, password string) bool {
 	existingUsers := GetAllUsers()
 
